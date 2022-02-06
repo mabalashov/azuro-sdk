@@ -1,0 +1,65 @@
+{
+  "name": "@azuro/sdk",
+  "version": "0.0.1",
+  "engines": {
+    "node": "=14.17.4",
+    "npm": "=6.14.14"
+  },
+  "author": {
+    "name": "Pavel Ivanov",
+    "email": "grammka@gmail.com"
+  },
+  "description": "Azuro SDK",
+  "homepage": "https://github.com/Azuro-protocol/sdk#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Azuro-protocol/sdk.git"
+  },
+  "keywords": [
+    "betting",
+    "protocol",
+    "sdk"
+  ],
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "license": "MIT",
+  "module": "dist/index.es.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\"",
+    "typechain": "typechain --target ethers-v5 --out-dir ./src/contracts/types './src/contracts/abis/*.json'",
+    "dev": "rollup -cw",
+    "build": "rimraf ./dist && rimraf ./lib && npm run typechain && rollup -c --compact",
+    "prepublish": "npm run build && npm run test"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.16.7",
+    "@babel/plugin-transform-destructuring": "^7.16.7",
+    "@babel/plugin-transform-runtime": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "@babel/preset-typescript": "^7.16.7",
+    "@rollup/plugin-json": "^4.1.0",
+    "@typechain/ethers-v5": "^9.0.0",
+    "@types/node": "^17.0.14",
+    "builtin-modules": "^3.2.0",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.67.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-typescript2": "^0.31.2",
+    "rollup-plugin-uglify": "^6.0.4",
+    "typechain": "^7.0.0",
+    "typescript": "^3.9.10"
+  },
+  "dependencies": {
+    "@ethersproject/contracts": "^5.5.0",
+    "@ethersproject/providers": "^5.5.3",
+    "@ethersproject/units": "^5.5.0",
+    "axios": "^0.25.0",
+    "ethers": "^5.5.4"
+  }
+}
