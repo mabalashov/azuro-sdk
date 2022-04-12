@@ -1,9 +1,108 @@
-type FetchUserBetsParams = {
+import { utils } from 'ethers'
+import { formatUnits } from '@ethersproject/units'
 
+import fetchGameIpfsData from './fetchGameIpfsData'
+import type { GameInfo } from './fetchConditions'
+import { getContract } from '../contracts'
+import betTypeOdd from '../helpers/betTypeOdd'
+import { ConditionStatus } from '../helpers/enums'
+import { USDT_DECIMALS, RATE_DECIMALS } from '../helpers/constants'
+
+
+const fetchBet = async (nftId: number) => {
+  const coreContract = getContract('core')
+
+  try {
+    // TODO take createdDate from bet - added on 7/19/21 by pavelivanov
+    let { conditionID, amount: bigIntAmount, outcome: rawOutcome, odds, payed, createdAt } = await coreContract.bets(nftId)
+    const { state, ipfsHash: ipfsHashHex, timestamp, outcomeWin } = await coreContract.getCondition(conditionID)
+
+    const conditionId = conditionID.toNumber()
+    const ipfsHashArr = utils.arrayify(ipfsHashHex)
+    const ipfsHash = utils.base58.encode([ 18, 32, ...ipfsHashArr ])
+
+    const gameData = await fetchGameIpfsData(ipfsHash)
+
+    const startsAt = timestamp.toNumber() * 1000
+    const outcomeBetId = rawOutcome.toNumber()
+    const outcomeWinId = outcomeWin.toNumber()
+
+    const { outcomeRegistryId, paramId } = betTypeOdd[outcomeBetId]
+
+    const rate = parseFloat(formatUnits(odds, RATE_DECIMALS))
+    const amount = parseFloat(formatUnits(bigIntAmount, USDT_DECIMALS))
+
+    let result
+
+    if (state === ConditionStatus.CANCELED) {
+      result = amount
+    }
+    else if (outcomeWinId === 0) {
+      result = null
+    }
+    else if (outcomeWinId === outcomeBetId) {
+      result = (amount * rate).toFixed(6)
+    }
+    else {
+      result = -1 * amount
+    }
+
+    const gameInfo: GameInfo = {
+      ...gameData,
+      startsAt,
+      state,
+    }
+
+    return {
+      nftId,
+      conditionId,
+      paramId,
+      outcomeRegistryId,
+      rate,
+      amount,
+      result,
+      createdAt: createdAt.toNumber() * 1000,
+      isRedeemed: payed,
+      gameInfo,
+    }
+  }
+  catch (err) {
+    console.error(err)
+  }
 }
 
-const fetchUserBets = () => {
+type FetchUserBetsProps = {
+  account: string
+}
 
+const fetchUserBets = async ({ account }: FetchUserBetsProps) => {
+  try {
+    let index = 0
+    let prevResult
+    const nftIds = []
+
+    const betContract = getContract('bet')
+
+    while (index === 0 || prevResult) {
+      try {
+        prevResult = await betContract.tokenOfOwnerByIndex(account, index++)
+
+        nftIds.push(prevResult.toNumber())
+      }
+      catch (err) {
+        // console.error(err)
+        prevResult = null
+      }
+    }
+
+    const bets = await Promise.all(nftIds.map(fetchBet))
+
+    return bets.filter(Boolean).sort((a, b) => b.createdAt - a.createdAt)
+  }
+  catch (err) {
+    console.error(err)
+    return []
+  }
 }
 
 

@@ -1,14 +1,6 @@
-import type { Game } from './api/fetchGames'
-import type { Condition, GameInfo } from './api/fetchConditions'
-
-export type AzuroGame = Game
-export type AzuroGameInfo = GameInfo
-export type AzuroCondition = Condition
-
+export type { Game as AzuroGame } from './api/fetchGames'
+export type { Condition as AzuroCondition, GameInfo as AzuroGameInfo } from './api/fetchConditions'
 export * from './api'
+export * from './helpers/constants'
 export { setSelectedChainId, setWallerProvider } from './contracts/state'
 export { configure } from './config'
-export { param, outcomeRegistry, marketRegistry } from './helpers/conditions'
-
-export const RATE_DECIMALS = 9
-export const USDT_DECIMALS = 18

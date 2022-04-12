@@ -1,6 +1,6 @@
 import fetchConditions from './fetchConditions'
 import type { FetchConditionsProps, GameInfo } from './fetchConditions'
-import betTypeOdd from '../helpers/conditions/betTypeOdd'
+import betTypeOdd from '../helpers/betTypeOdd'
 
 
 /*

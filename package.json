@@ -1,6 +1,6 @@
 {
-  "name": "@azuro/sdk",
-  "version": "0.0.1",
+  "name": "@azuro-protocol/sdk",
+  "version": "0.0.4",
   "engines": {
     "node": "=14.17.4",
     "npm": "=6.14.14"
@@ -55,7 +55,7 @@
     "typechain": "^7.0.0",
     "typescript": "^3.9.10"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@ethersproject/contracts": "^5.5.0",
     "@ethersproject/providers": "^5.5.3",
     "@ethersproject/units": "^5.5.0",

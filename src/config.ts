@@ -8,7 +8,7 @@ const config: Config = {
   alchemyKey: null,
 }
 
-export const configure = (_config: Config) => {
+export const configure = (_config: Partial<Config>) => {
   Object.entries(_config).forEach(([ key, value ]) => {
     config[key] = value
   })

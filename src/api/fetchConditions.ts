@@ -4,7 +4,7 @@ import type { BigNumber } from 'ethers'
 import { getContract } from '../contracts'
 import calculateInitialOdds from './calculateInitialOdds'
 import fetchGameIpfsData from './fetchGameIpfsData'
-import { ConditionStatus } from '../enums'
+import { ConditionStatus } from '../helpers/enums'
 
 
 export type Condition = {

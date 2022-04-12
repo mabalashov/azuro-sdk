@@ -19,7 +19,7 @@ const getProvider = (withWalletProvider?: boolean) => {
   }
 
   // Goerli Network
-  if (state.selectedChainId === 5) {
+  if (state.selectedChainId === 5 || !config.alchemyKey) {
     return new InfuraProvider(state.selectedChainId, config.infuraKey)
   }
 
