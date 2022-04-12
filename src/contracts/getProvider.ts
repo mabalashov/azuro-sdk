@@ -18,6 +18,10 @@ const getProvider = (withWalletProvider?: boolean) => {
     return state.walletProvider
   }
 
+  if (config.rpcUrl) {
+    return new JsonRpcProvider(config.rpcUrl)
+  }
+
   // Goerli Network
   if (state.selectedChainId === 5 || !config.alchemyKey) {
     return new InfuraProvider(state.selectedChainId, config.infuraKey)

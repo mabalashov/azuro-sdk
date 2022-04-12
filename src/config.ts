@@ -1,11 +1,13 @@
 type Config = {
   infuraKey: string
   alchemyKey: string
+  rpcUrl: string
 }
 
 const config: Config = {
   infuraKey: null,
   alchemyKey: null,
+  rpcUrl: null,
 }
 
 export const configure = (_config: Partial<Config>) => {
