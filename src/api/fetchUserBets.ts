@@ -15,8 +15,9 @@ const fetchBet = async (nftId: number) => {
   try {
     // TODO take createdDate from bet - added on 7/19/21 by pavelivanov
     let { conditionID, amount: bigIntAmount, outcome: rawOutcome, odds, payed, createdAt } = await coreContract.bets(nftId)
-    const { state, ipfsHash: ipfsHashHex, timestamp, outcomeWin } = await coreContract.getCondition(conditionID)
+    const { scopeID, state, ipfsHash: ipfsHashHex, timestamp, outcomeWin } = await coreContract.getCondition(conditionID)
 
+    const gameId = scopeID.toNumber()
     const conditionId = conditionID.toNumber()
     const ipfsHashArr = utils.arrayify(ipfsHashHex)
     const ipfsHash = utils.base58.encode([ 18, 32, ...ipfsHashArr ])
@@ -48,6 +49,7 @@ const fetchBet = async (nftId: number) => {
     }
 
     const gameInfo: GameInfo = {
+      id: gameId,
       ...gameData,
       startsAt,
       state,
