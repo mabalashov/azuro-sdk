@@ -7,22 +7,22 @@ import ERC20ABI from './abis/ERC20.json'
 
 export const CONTRACTS: ContractsData = {
   core: {
-    address: '0x1023DB1EFE371CC798f775284D5f2B46e83FdfFd',
+    address: '0x0410557D9A6364E36A8C876d2bf748CF73B7782a',
     abi: CoreABI,
     decimals: 18,
   },
   lp: {
-    address: '0x6Cb354C4844634509a59B0BabBa9b41aEe4d5617',
+    address: '0x83cbbBAa1F22faD2e46310C5580624eaCecE5a3b',
     abi: LpABI,
     decimals: 18,
   },
   bet: {
-    address: '0x10F39e8e1f1ea645Ab1959e10114059e9A23B079',
+    address: '0x1cCF59e3336bB99831870d6c1ebdC046aF342E73',
     abi: BetABI,
     decimals: 18,
   },
   usdt: {
-    address: '0x1267e4e7D0f17c9D390d6bEeE5655A58Df35af34',
+    address: '0xe5b51cb429edB62b29cECEBACB574074cd276283',
     abi: ERC20ABI,
     decimals: 18,
   },
