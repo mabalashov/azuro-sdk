@@ -28,7 +28,7 @@ type BetVariant = {
   conditionId: number
   outcomeId: number
   outcomeRegistryId: number
-  paramId: number
+  paramId: number | null
   value: number
 }
 

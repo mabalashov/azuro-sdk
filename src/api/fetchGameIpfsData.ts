@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import config from '../config'
+
 
 type IpfsData = {
   gameId: number
@@ -25,7 +27,7 @@ type FormattedIpfsData = {
 const fetchGameIpfsData = async (ipfsHash: string): Promise<FormattedIpfsData | null> => {
   try {
     // TODO IPFS response with 5xx sometimes, need to add retry - added on 6/21/21 by pavelivanov
-    const { data } = await axios.get(`https://azuro.mypinata.cloud/ipfs/${ipfsHash}`)
+    const { data } = await axios.get(`${config.ipfsGateway}${ipfsHash}`)
     const { gameId, entity1Name, entity1Image, entity2Name, entity2Image, titleCountry, titleLeague } = data as IpfsData
 
     return {

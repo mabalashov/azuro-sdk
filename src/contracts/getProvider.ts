@@ -1,4 +1,4 @@
-import { JsonRpcProvider, AlchemyProvider, InfuraProvider } from '@ethersproject/providers'
+import { JsonRpcProvider } from '@ethersproject/providers'
 
 import state from './state'
 import config from '../config'
@@ -18,17 +18,7 @@ const getProvider = (withWalletProvider?: boolean) => {
     return state.walletProvider
   }
 
-  if (config.rpcUrl) {
-    return new JsonRpcProvider(config.rpcUrl)
-  }
-
-  // Goerli Network
-  if (state.selectedChainId === 5 || !config.alchemyKey) {
-    return new InfuraProvider(state.selectedChainId, config.infuraKey)
-  }
-
-  // otherwise use Alchemy provider
-  return new AlchemyProvider(state.selectedChainId, config.alchemyKey)
+  return new JsonRpcProvider(config.rpcUrl)
 }
 
 export default getProvider
