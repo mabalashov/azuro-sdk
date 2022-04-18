@@ -55,7 +55,7 @@ const fetchConditions = async (props?: FetchConditionsProps): Promise<Condition[
       const startsAt = condition.timestamp.toNumber() * 1000
 
       // filter already started games
-      if (startsAt >= Date.now()) {
+      if (startsAt <= Date.now()) {
         return
       }
 
