@@ -1,5 +1,8 @@
+import { utils } from 'ethers'
+
+import fetchGameIpfsData from './fetchGameIpfsData'
 import fetchConditions from './fetchConditions'
-import type { FetchConditionsProps, GameInfo } from './fetchConditions'
+import type { FetchConditionsProps, ConditionGameData } from './fetchConditions'
 import betTypeOdd from '../helpers/betTypeOdd'
 
 
@@ -126,7 +129,7 @@ const groupOddsByOutcomes = (values: GetOddsByOutcomesProps) => {
 
 type FetchGamesProps = FetchConditionsProps
 
-export type Game = GameInfo & {
+export type Game = ConditionGameData & {
   conditions: {
     paramId: number
     odds: Odds[]
@@ -134,16 +137,25 @@ export type Game = GameInfo & {
   marketRegistryId: number
 }
 
-const fetchGames = async (props: FetchGamesProps = {}): Promise<Game[]> => {
+type Result = Array<Omit<Game, 'ipfsHashHex'> & {
+  league: string
+  country: string
+  participants: {
+    name: string
+    image: string
+  }[]
+}>
+
+const fetchGames = async (props: FetchGamesProps = {}): Promise<Result> => {
   const conditions = await fetchConditions(props)
 
   conditions.forEach((condition) => {
-    const { id, outcomes, odds, gameInfo } = condition
+    const { id, outcomes, odds, gameData } = condition
 
-    gamesInfo[gameInfo.id] = gameInfo
+    gamesInfo[gameData.id] = gameData
 
     groupOddsByOutcomes({
-      gameId: gameInfo.id,
+      gameId: gameData.id,
       conditionId: id,
       outcomes,
       odds,
@@ -152,7 +164,26 @@ const fetchGames = async (props: FetchGamesProps = {}): Promise<Game[]> => {
 
   const games = groupGames()
 
-  return games.sort((a, b) => a.startsAt - b.startsAt)
+  const result = await Promise.all(games.map(async (game) => {
+    try {
+      const { ipfsHashHex, ...rest } = game
+
+      const ipfsHashArr = utils.arrayify(ipfsHashHex)
+      const ipfsHash = utils.base58.encode([ 18, 32, ...ipfsHashArr ])
+      const gameData = await fetchGameIpfsData(ipfsHash)
+
+      return {
+        ...gameData,
+        ...rest,
+      }
+    }
+    catch (err) {
+      console.error(err)
+      return null
+    }
+  }))
+
+  return result.filter(Boolean).sort((a, b) => a.startsAt - b.startsAt)
 }
 
 

@@ -1,29 +1,22 @@
-import { utils } from 'ethers'
 import type { BigNumber } from 'ethers'
 
 import { getContract } from '../contracts'
 import calculateInitialOdds from './calculateInitialOdds'
-import fetchGameIpfsData from './fetchGameIpfsData'
 import { ConditionStatus } from '../helpers/enums'
 
+
+export type ConditionGameData = {
+  id: number
+  state: ConditionStatus
+  startsAt: number
+  ipfsHashHex: string
+}
 
 export type Condition = {
   id: number
   odds: number[]
   outcomes: number[]
-  gameInfo: GameInfo
-}
-
-export type GameInfo = {
-  id: number
-  state: ConditionStatus
-  league: string
-  country: string
-  participants: {
-    name: string
-    image: string
-  }[]
-  startsAt: number
+  gameData: ConditionGameData
 }
 
 const _calculateInitialOdds = (fundBank: BigNumber[], margin: BigNumber) => {
@@ -71,19 +64,16 @@ const fetchConditions = async (props: FetchConditionsProps = {}): Promise<Condit
       const outcomes = condition.outcomes.map((value) => value.toNumber())
 
       const startsAt = condition.timestamp.toNumber() * 1000
-      const ipfsHashArr = utils.arrayify(condition.ipfsHash)
-      const ipfsHash = utils.base58.encode([ 18, 32, ...ipfsHashArr ])
-      const gameData = await fetchGameIpfsData(ipfsHash)
 
       return {
         id,
         outcomes,
         odds,
-        gameInfo: {
+        gameData: {
           id: gameId,
-          ...gameData,
           state,
           startsAt,
+          ipfsHashHex: condition.ipfsHash,
         },
       }
     }
