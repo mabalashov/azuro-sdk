@@ -36,8 +36,8 @@ export type FetchConditionsProps = {
   }
 }
 
-const fetchConditions = async (props: FetchConditionsProps = {}): Promise<Condition[]> => {
-  const { filters: { resolved = true, canceled = true } = {} } = props
+const fetchConditions = async (props?: FetchConditionsProps): Promise<Condition[]> => {
+  const { resolved = true, canceled = true } = props?.filters || {}
 
   const coreContract = getContract('core')
 
@@ -49,8 +49,15 @@ const fetchConditions = async (props: FetchConditionsProps = {}): Promise<Condit
       const id = conditionID.toNumber()
 
       const condition = await coreContract.getCondition(conditionID)
+
       const state = condition.state
       const gameId = condition.scopeID.toNumber()
+      const startsAt = condition.timestamp.toNumber() * 1000
+
+      // filter already started games
+      if (startsAt >= Date.now()) {
+        return
+      }
 
       if (!resolved && state === ConditionStatus.RESOLVED) {
         return
@@ -62,8 +69,6 @@ const fetchConditions = async (props: FetchConditionsProps = {}): Promise<Condit
 
       const odds = _calculateInitialOdds(condition.fundBank, condition.margin)
       const outcomes = condition.outcomes.map((value) => value.toNumber())
-
-      const startsAt = condition.timestamp.toNumber() * 1000
 
       return {
         id,
