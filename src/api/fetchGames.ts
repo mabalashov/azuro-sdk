@@ -58,13 +58,21 @@ const groupBetVariants = (oddsArr: (BetVariant & { paramId: number })[]): Record
   return group
 }
 
-const groupGames = (): Game[] => {
+type GroupGamesResult = ConditionGameData & {
+  marketRegistryId: number
+  conditions: {
+    paramId: number
+    odds: Odds[]
+  }[]
+}
+
+const groupGames = (): GroupGamesResult[] => {
   return Object.keys(gameBets).map((key) => {
     const { gameId, marketRegistryId, betVariants } = gameBets[key]
 
     const groupedBetVariants = groupBetVariants(betVariants)
 
-    let conditions: Game['conditions']
+    let conditions: GroupGamesResult['conditions']
 
     const paramIds = Object.keys(groupedBetVariants)
 
@@ -80,13 +88,11 @@ const groupGames = (): Game[] => {
       }))
     }
 
-    const game: Game = {
+    return {
       ...gamesInfo[gameId],
       conditions,
       marketRegistryId,
     }
-
-    return game
   })
 }
 
@@ -129,24 +135,16 @@ const groupOddsByOutcomes = (values: GetOddsByOutcomesProps) => {
 
 type FetchGamesProps = FetchConditionsProps
 
-export type Game = ConditionGameData & {
-  conditions: {
-    paramId: number
-    odds: Odds[]
-  }[]
-  marketRegistryId: number
-}
-
-type Result = Array<Omit<Game, 'ipfsHashHex'> & {
+export type Game = Omit<GroupGamesResult, 'ipfsHashHex'> & {
   league: string
   country: string
   participants: {
     name: string
     image: string
   }[]
-}>
+}
 
-const fetchGames = async (props: FetchGamesProps = {}): Promise<Result> => {
+const fetchGames = async (props: FetchGamesProps = {}): Promise<Game[]> => {
   const conditions = await fetchConditions(props)
 
   conditions.forEach((condition) => {

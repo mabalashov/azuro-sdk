@@ -2,7 +2,8 @@ import { utils } from 'ethers'
 import { formatUnits } from '@ethersproject/units'
 
 import fetchGameIpfsData from './fetchGameIpfsData'
-import type { GameInfo } from './fetchConditions'
+import type { FormattedIpfsData } from './fetchGameIpfsData'
+import type { ConditionGameData } from './fetchConditions'
 import { getContract } from '../contracts'
 import betTypeOdd from '../helpers/betTypeOdd'
 import { ConditionStatus } from '../helpers/enums'
@@ -48,7 +49,7 @@ const fetchBet = async (nftId: number) => {
       result = -1 * amount
     }
 
-    const gameInfo: GameInfo = {
+    const gameInfo: Omit<ConditionGameData, 'ipfsHashHex'> & FormattedIpfsData = {
       id: gameId,
       ...gameData,
       startsAt,
@@ -70,6 +71,7 @@ const fetchBet = async (nftId: number) => {
   }
   catch (err) {
     console.error(err)
+    return null
   }
 }
 

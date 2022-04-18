@@ -14,7 +14,7 @@ type IpfsData = {
   titleLeague: string
 }
 
-type FormattedIpfsData = {
+export type FormattedIpfsData = {
   league: string
   country: string
   participants: {
