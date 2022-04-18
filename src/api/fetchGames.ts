@@ -170,6 +170,10 @@ const fetchGames = async (props: FetchGamesProps = {}): Promise<Game[]> => {
       const ipfsHash = utils.base58.encode([ 18, 32, ...ipfsHashArr ])
       const gameData = await fetchGameIpfsData(ipfsHash)
 
+      if (!gameData) {
+        return null
+      }
+
       return {
         ...gameData,
         ...rest,

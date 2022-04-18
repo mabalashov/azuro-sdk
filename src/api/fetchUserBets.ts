@@ -25,6 +25,10 @@ const fetchBet = async (nftId: number) => {
 
     const gameData = await fetchGameIpfsData(ipfsHash)
 
+    if (!gameData) {
+      return
+    }
+
     const startsAt = timestamp.toNumber() * 1000
     const outcomeBetId = rawOutcome.toNumber()
     const outcomeWinId = outcomeWin.toNumber()
