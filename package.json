@@ -1,6 +1,6 @@
 {
   "name": "@azuro-protocol/sdk",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "engines": {
     "node": "=14.17.4",
     "npm": "=6.14.14"

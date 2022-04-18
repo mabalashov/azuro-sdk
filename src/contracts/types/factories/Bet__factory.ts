@@ -102,6 +102,19 @@ const _abi = [
     type: "event",
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "lp",
+        type: "address",
+      },
+    ],
+    name: "lpChanged",
+    type: "event",
+  },
+  {
     inputs: [
       {
         internalType: "address",
@@ -139,26 +152,13 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
-      },
-    ],
-    name: "burn",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [],
-    name: "freeze",
+    name: "baseURI",
     outputs: [
       {
-        internalType: "bool",
+        internalType: "string",
         name: "",
-        type: "bool",
+        type: "string",
       },
     ],
     stateMutability: "view",
@@ -167,12 +167,12 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "bool",
-        name: "active",
-        type: "bool",
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
       },
     ],
-    name: "freezeTransfers",
+    name: "burn",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -191,6 +191,38 @@ const _abi = [
         internalType: "address",
         name: "",
         type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "getCoreByTokenId",
+    outputs: [
+      {
+        internalType: "address",
+        name: "core",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getLastTokenId",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -248,9 +280,9 @@ const _abi = [
         type: "address",
       },
       {
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
+        internalType: "address",
+        name: "core",
+        type: "address",
       },
     ],
     name: "mint",
@@ -311,7 +343,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "ownerOftoken",
+    name: "ownerOfToken",
     outputs: [
       {
         internalType: "address",
@@ -394,6 +426,19 @@ const _abi = [
       },
     ],
     name: "setApprovalForAll",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "uri",
+        type: "string",
+      },
+    ],
+    name: "setBaseURI",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

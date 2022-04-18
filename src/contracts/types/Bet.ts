@@ -22,21 +22,23 @@ export interface BetInterface extends utils.Interface {
   functions: {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
+    "baseURI()": FunctionFragment;
     "burn(uint256)": FunctionFragment;
-    "freeze()": FunctionFragment;
-    "freezeTransfers(bool)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
+    "getCoreByTokenId(uint256)": FunctionFragment;
+    "getLastTokenId()": FunctionFragment;
     "initialize()": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "lpAddress()": FunctionFragment;
-    "mint(address,uint256)": FunctionFragment;
+    "mint(address,address)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
-    "ownerOftoken(uint256)": FunctionFragment;
+    "ownerOfToken(uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
+    "setBaseURI(string)": FunctionFragment;
     "setLP(address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
@@ -53,15 +55,19 @@ export interface BetInterface extends utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
+  encodeFunctionData(functionFragment: "baseURI", values?: undefined): string;
   encodeFunctionData(functionFragment: "burn", values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: "freeze", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "freezeTransfers",
-    values: [boolean]
-  ): string;
   encodeFunctionData(
     functionFragment: "getApproved",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getCoreByTokenId",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getLastTokenId",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
@@ -74,7 +80,7 @@ export interface BetInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "lpAddress", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "mint",
-    values: [string, BigNumberish]
+    values: [string, string]
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -83,7 +89,7 @@ export interface BetInterface extends utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "ownerOftoken",
+    functionFragment: "ownerOfToken",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -98,6 +104,7 @@ export interface BetInterface extends utils.Interface {
     functionFragment: "setApprovalForAll",
     values: [string, boolean]
   ): string;
+  encodeFunctionData(functionFragment: "setBaseURI", values: [string]): string;
   encodeFunctionData(functionFragment: "setLP", values: [string]): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
@@ -131,14 +138,18 @@ export interface BetInterface extends utils.Interface {
 
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "baseURI", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "freeze", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "freezeTransfers",
+    functionFragment: "getApproved",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getApproved",
+    functionFragment: "getCoreByTokenId",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getLastTokenId",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
@@ -152,7 +163,7 @@ export interface BetInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "ownerOftoken",
+    functionFragment: "ownerOfToken",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -167,6 +178,7 @@ export interface BetInterface extends utils.Interface {
     functionFragment: "setApprovalForAll",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setBaseURI", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setLP", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
@@ -200,12 +212,14 @@ export interface BetInterface extends utils.Interface {
     "ApprovalForAll(address,address,bool)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
+    "lpChanged(address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "lpChanged"): EventFragment;
 }
 
 export type ApprovalEvent = TypedEvent<
@@ -236,6 +250,10 @@ export type TransferEvent = TypedEvent<
 >;
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
+
+export type lpChangedEvent = TypedEvent<[string], { lp: string }>;
+
+export type lpChangedEventFilter = TypedEventFilter<lpChangedEvent>;
 
 export interface Bet extends BaseContract {
   contractName: "Bet";
@@ -273,15 +291,10 @@ export interface Bet extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    baseURI(overrides?: CallOverrides): Promise<[string]>;
+
     burn(
       id: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    freeze(overrides?: CallOverrides): Promise<[boolean]>;
-
-    freezeTransfers(
-      active: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -289,6 +302,15 @@ export interface Bet extends BaseContract {
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    getCoreByTokenId(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string] & { core: string }>;
+
+    getLastTokenId(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { tokenId: BigNumber }>;
 
     initialize(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -304,7 +326,7 @@ export interface Bet extends BaseContract {
 
     mint(
       account: string,
-      id: BigNumberish,
+      core: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -317,7 +339,7 @@ export interface Bet extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    ownerOftoken(
+    ownerOfToken(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
@@ -344,6 +366,11 @@ export interface Bet extends BaseContract {
     setApprovalForAll(
       operator: string,
       approved: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setBaseURI(
+      uri: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -398,15 +425,10 @@ export interface Bet extends BaseContract {
 
   balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
+  baseURI(overrides?: CallOverrides): Promise<string>;
+
   burn(
     id: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  freeze(overrides?: CallOverrides): Promise<boolean>;
-
-  freezeTransfers(
-    active: boolean,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -414,6 +436,13 @@ export interface Bet extends BaseContract {
     tokenId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  getCoreByTokenId(
+    tokenId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  getLastTokenId(overrides?: CallOverrides): Promise<BigNumber>;
 
   initialize(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -429,7 +458,7 @@ export interface Bet extends BaseContract {
 
   mint(
     account: string,
-    id: BigNumberish,
+    core: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -439,7 +468,7 @@ export interface Bet extends BaseContract {
 
   ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-  ownerOftoken(
+  ownerOfToken(
     tokenId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<string>;
@@ -466,6 +495,11 @@ export interface Bet extends BaseContract {
   setApprovalForAll(
     operator: string,
     approved: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setBaseURI(
+    uri: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -517,16 +551,21 @@ export interface Bet extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
+    baseURI(overrides?: CallOverrides): Promise<string>;
+
     burn(id: BigNumberish, overrides?: CallOverrides): Promise<void>;
-
-    freeze(overrides?: CallOverrides): Promise<boolean>;
-
-    freezeTransfers(active: boolean, overrides?: CallOverrides): Promise<void>;
 
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    getCoreByTokenId(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    getLastTokenId(overrides?: CallOverrides): Promise<BigNumber>;
 
     initialize(overrides?: CallOverrides): Promise<void>;
 
@@ -540,7 +579,7 @@ export interface Bet extends BaseContract {
 
     mint(
       account: string,
-      id: BigNumberish,
+      core: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -550,7 +589,7 @@ export interface Bet extends BaseContract {
 
     ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-    ownerOftoken(
+    ownerOfToken(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
@@ -577,6 +616,8 @@ export interface Bet extends BaseContract {
       approved: boolean,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    setBaseURI(uri: string, overrides?: CallOverrides): Promise<void>;
 
     setLP(lpAddress_: string, overrides?: CallOverrides): Promise<void>;
 
@@ -657,6 +698,9 @@ export interface Bet extends BaseContract {
       to?: string | null,
       tokenId?: BigNumberish | null
     ): TransferEventFilter;
+
+    "lpChanged(address)"(lp?: null): lpChangedEventFilter;
+    lpChanged(lp?: null): lpChangedEventFilter;
   };
 
   estimateGas: {
@@ -668,15 +712,10 @@ export interface Bet extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
+    baseURI(overrides?: CallOverrides): Promise<BigNumber>;
+
     burn(
       id: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    freeze(overrides?: CallOverrides): Promise<BigNumber>;
-
-    freezeTransfers(
-      active: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -684,6 +723,13 @@ export interface Bet extends BaseContract {
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    getCoreByTokenId(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getLastTokenId(overrides?: CallOverrides): Promise<BigNumber>;
 
     initialize(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -699,7 +745,7 @@ export interface Bet extends BaseContract {
 
     mint(
       account: string,
-      id: BigNumberish,
+      core: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -712,7 +758,7 @@ export interface Bet extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    ownerOftoken(
+    ownerOfToken(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -739,6 +785,11 @@ export interface Bet extends BaseContract {
     setApprovalForAll(
       operator: string,
       approved: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setBaseURI(
+      uri: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -797,15 +848,10 @@ export interface Bet extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    baseURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     burn(
       id: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    freeze(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    freezeTransfers(
-      active: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -813,6 +859,13 @@ export interface Bet extends BaseContract {
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    getCoreByTokenId(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getLastTokenId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     initialize(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -828,7 +881,7 @@ export interface Bet extends BaseContract {
 
     mint(
       account: string,
-      id: BigNumberish,
+      core: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -841,7 +894,7 @@ export interface Bet extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    ownerOftoken(
+    ownerOfToken(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -868,6 +921,11 @@ export interface Bet extends BaseContract {
     setApprovalForAll(
       operator: string,
       approved: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setBaseURI(
+      uri: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

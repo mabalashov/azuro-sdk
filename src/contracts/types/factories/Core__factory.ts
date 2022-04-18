@@ -11,16 +11,22 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
+        indexed: true,
+        internalType: "uint256",
+        name: "oracleConditionID",
+        type: "uint256",
+      },
+      {
+        indexed: true,
         internalType: "uint256",
         name: "conditionID",
         type: "uint256",
       },
       {
         indexed: false,
-        internalType: "uint256",
+        internalType: "uint64",
         name: "timestamp",
-        type: "uint256",
+        type: "uint64",
       },
     ],
     name: "ConditionCreated",
@@ -30,22 +36,28 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
+        indexed: true,
+        internalType: "uint256",
+        name: "oracleConditionID",
+        type: "uint256",
+      },
+      {
+        indexed: true,
         internalType: "uint256",
         name: "conditionID",
         type: "uint256",
       },
       {
         indexed: false,
-        internalType: "uint256",
+        internalType: "uint64",
         name: "outcomeWin",
-        type: "uint256",
+        type: "uint64",
       },
       {
         indexed: false,
-        internalType: "uint256",
+        internalType: "uint8",
         name: "state",
-        type: "uint256",
+        type: "uint8",
       },
       {
         indexed: false,
@@ -68,12 +80,70 @@ const _abi = [
       },
       {
         indexed: false,
-        internalType: "uint256",
+        internalType: "uint64",
         name: "newTimestamp",
-        type: "uint256",
+        type: "uint64",
       },
     ],
     name: "ConditionShifted",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newLP",
+        type: "address",
+      },
+    ],
+    name: "LPChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "maintainer",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "bool",
+        name: "active",
+        type: "bool",
+      },
+    ],
+    name: "MaintainerUpdated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOracle",
+        type: "address",
+      },
+    ],
+    name: "OracleAdded",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "oracle",
+        type: "address",
+      },
+    ],
+    name: "OracleRenounced",
     type: "event",
   },
   {
@@ -93,6 +163,38 @@ const _abi = [
       },
     ],
     name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "bool",
+        name: "flag",
+        type: "bool",
+      },
+    ],
+    name: "allConditionsStoped",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "conditionID",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "bool",
+        name: "flag",
+        type: "bool",
+      },
+    ],
+    name: "conditionStoped",
     type: "event",
   },
   {
@@ -117,6 +219,48 @@ const _abi = [
     inputs: [
       {
         internalType: "uint256",
+        name: "odds",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "marginality",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "decimals",
+        type: "uint256",
+      },
+    ],
+    name: "addMargin",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "newOdds",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "pure",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "allConditionStopped",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
         name: "",
         type: "uint256",
       },
@@ -129,35 +273,35 @@ const _abi = [
         type: "uint256",
       },
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "amount",
-        type: "uint256",
+        type: "uint128",
       },
       {
-        internalType: "uint256",
-        name: "odds",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "outcome",
-        type: "uint256",
+        type: "uint64",
       },
       {
-        internalType: "bool",
-        name: "payed",
-        type: "bool",
-      },
-      {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "createdAt",
-        type: "uint256",
+        type: "uint64",
       },
       {
         internalType: "address",
         name: "affiliate",
         type: "address",
       },
+      {
+        internalType: "uint64",
+        name: "odds",
+        type: "uint64",
+      },
+      {
+        internalType: "bool",
+        name: "payed",
+        type: "bool",
+      },
     ],
     stateMutability: "view",
     type: "function",
@@ -170,25 +314,38 @@ const _abi = [
         type: "uint256",
       },
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "amount",
-        type: "uint256",
+        type: "uint128",
       },
       {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "outcomeWin",
-        type: "uint256",
+        type: "uint64",
       },
     ],
     name: "calculateOdds",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "odds",
-        type: "uint256",
+        type: "uint64",
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "oracleConditionID",
+        type: "uint256",
+      },
+    ],
+    name: "cancel",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -199,7 +356,49 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "cancel",
+    name: "cancelByMaintainer",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "a",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "m",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "decimals",
+        type: "uint256",
+      },
+    ],
+    name: "ceil",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "pure",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint64",
+        name: "newRatio_",
+        type: "uint64",
+      },
+    ],
+    name: "changeMaxBanksRatio",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -215,14 +414,14 @@ const _abi = [
     name: "conditions",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "reinforcement",
-        type: "uint256",
+        type: "uint128",
       },
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "margin",
-        type: "uint256",
+        type: "uint128",
       },
       {
         internalType: "bytes32",
@@ -230,50 +429,24 @@ const _abi = [
         type: "bytes32",
       },
       {
-        internalType: "uint256",
-        name: "outcomeWin",
-        type: "uint256",
+        internalType: "uint128",
+        name: "scopeID",
+        type: "uint128",
       },
       {
-        internalType: "enum Core.conditionState",
+        internalType: "uint64",
+        name: "outcomeWin",
+        type: "uint64",
+      },
+      {
+        internalType: "uint64",
+        name: "timestamp",
+        type: "uint64",
+      },
+      {
+        internalType: "enum ICore.conditionState",
         name: "state",
         type: "uint8",
-      },
-      {
-        internalType: "uint256",
-        name: "maxPayout",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "timestamp",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "conditionsMargin",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "conditionsReinforcementFix",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -283,23 +456,28 @@ const _abi = [
     inputs: [
       {
         internalType: "uint256",
-        name: "oracleConditionID",
+        name: "oracleCondID",
         type: "uint256",
       },
       {
-        internalType: "uint256[2]",
+        internalType: "uint128",
+        name: "scopeID",
+        type: "uint128",
+      },
+      {
+        internalType: "uint64[2]",
         name: "odds",
-        type: "uint256[2]",
+        type: "uint64[2]",
       },
       {
-        internalType: "uint256[2]",
+        internalType: "uint64[2]",
         name: "outcomes",
-        type: "uint256[2]",
+        type: "uint64[2]",
       },
       {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "timestamp",
-        type: "uint256",
+        type: "uint64",
       },
       {
         internalType: "bytes32",
@@ -317,9 +495,35 @@ const _abi = [
     name: "decimals",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "",
-        type: "uint256",
+        type: "uint128",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "defaultMargin",
+    outputs: [
+      {
+        internalType: "uint128",
+        name: "",
+        type: "uint128",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "defaultReinforcement",
+    outputs: [
+      {
+        internalType: "uint128",
+        name: "",
+        type: "uint128",
       },
     ],
     stateMutability: "view",
@@ -336,19 +540,19 @@ const _abi = [
     name: "getBetInfo",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "amount",
-        type: "uint256",
+        type: "uint128",
       },
       {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "odds",
-        type: "uint256",
+        type: "uint64",
       },
       {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "createdAt",
-        type: "uint256",
+        type: "uint64",
       },
       {
         internalType: "address",
@@ -372,34 +576,34 @@ const _abi = [
       {
         components: [
           {
-            internalType: "uint256",
-            name: "reinforcement",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256[2]",
+            internalType: "uint128[2]",
             name: "fundBank",
-            type: "uint256[2]",
+            type: "uint128[2]",
           },
           {
-            internalType: "uint256[2]",
+            internalType: "uint128[2]",
             name: "payouts",
-            type: "uint256[2]",
+            type: "uint128[2]",
           },
           {
-            internalType: "uint256[2]",
+            internalType: "uint128[2]",
             name: "totalNetBets",
-            type: "uint256[2]",
+            type: "uint128[2]",
           },
           {
-            internalType: "uint256[2]",
-            name: "outcomes",
-            type: "uint256[2]",
+            internalType: "uint128",
+            name: "reinforcement",
+            type: "uint128",
           },
           {
-            internalType: "uint256",
+            internalType: "uint128",
             name: "margin",
-            type: "uint256",
+            type: "uint128",
+          },
+          {
+            internalType: "uint64[2]",
+            name: "outcomes",
+            type: "uint64[2]",
           },
           {
             internalType: "bytes32",
@@ -407,27 +611,27 @@ const _abi = [
             type: "bytes32",
           },
           {
-            internalType: "uint256",
-            name: "outcomeWin",
-            type: "uint256",
+            internalType: "uint128",
+            name: "scopeID",
+            type: "uint128",
           },
           {
-            internalType: "enum Core.conditionState",
+            internalType: "uint64",
+            name: "outcomeWin",
+            type: "uint64",
+          },
+          {
+            internalType: "uint64",
+            name: "timestamp",
+            type: "uint64",
+          },
+          {
+            internalType: "enum ICore.conditionState",
             name: "state",
             type: "uint8",
           },
-          {
-            internalType: "uint256",
-            name: "maxPayout",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "timestamp",
-            type: "uint256",
-          },
         ],
-        internalType: "struct Core.Condition",
+        internalType: "struct ICore.Condition",
         name: "",
         type: "tuple",
       },
@@ -446,22 +650,28 @@ const _abi = [
     name: "getConditionFunds",
     outputs: [
       {
-        internalType: "uint256[2]",
+        internalType: "uint128[2]",
         name: "fundBank",
-        type: "uint256[2]",
+        type: "uint128[2]",
       },
     ],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [],
-    name: "getCurrentReinforcement",
-    outputs: [
+    inputs: [
       {
         internalType: "uint256",
-        name: "",
+        name: "conditionID",
         type: "uint256",
+      },
+    ],
+    name: "getConditionReinforcement",
+    outputs: [
+      {
+        internalType: "uint128",
+        name: "reinforcement",
+        type: "uint128",
       },
     ],
     stateMutability: "view",
@@ -483,9 +693,91 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "uint64",
+        name: "outcomeId_",
+        type: "uint64",
+      },
+    ],
+    name: "getMargin",
+    outputs: [
+      {
+        internalType: "uint128",
+        name: "",
+        type: "uint128",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
-        name: "reinforcement_",
+        name: "fund1Bank_",
         type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "fund2Bank_",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "amount_",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "outcomeIndex_",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "marginality_",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "decimals_",
+        type: "uint256",
+      },
+    ],
+    name: "getOddsFromBanks",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "pure",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint64",
+        name: "outcomeId_",
+        type: "uint64",
+      },
+    ],
+    name: "getReinforcement",
+    outputs: [
+      {
+        internalType: "uint128",
+        name: "",
+        type: "uint128",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint128",
+        name: "reinforcement_",
+        type: "uint128",
       },
       {
         internalType: "address",
@@ -493,19 +785,33 @@ const _abi = [
         type: "address",
       },
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "margin_",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "math_",
-        type: "address",
+        type: "uint128",
       },
     ],
     name: "initialize",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "oracleWallet",
+        type: "address",
+      },
+    ],
+    name: "isOracle",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -534,7 +840,7 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "lastBetID",
+    name: "lastConditionId",
     outputs: [
       {
         internalType: "uint256",
@@ -579,12 +885,36 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "mathAddress",
+    name: "maxBanksRatio",
     outputs: [
+      {
+        internalType: "uint64",
+        name: "",
+        type: "uint64",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
       {
         internalType: "address",
         name: "",
         type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "oracleConditionIDs",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -631,18 +961,23 @@ const _abi = [
       },
       {
         internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint128",
         name: "amount",
-        type: "uint256",
+        type: "uint128",
       },
       {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "outcomeWin",
-        type: "uint256",
+        type: "uint64",
       },
       {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "minOdds",
-        type: "uint256",
+        type: "uint64",
       },
       {
         internalType: "address",
@@ -653,24 +988,19 @@ const _abi = [
     name: "putBet",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "",
-        type: "uint256",
+        type: "uint64",
       },
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "",
-        type: "uint256",
+        type: "uint128",
       },
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
+        type: "uint128",
       },
     ],
     stateMutability: "nonpayable",
@@ -700,13 +1030,13 @@ const _abi = [
     inputs: [
       {
         internalType: "uint256",
-        name: "conditionID",
+        name: "oracleCondID",
         type: "uint256",
       },
       {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "outcomeWin",
-        type: "uint256",
+        type: "uint64",
       },
     ],
     name: "resolveCondition",
@@ -730,9 +1060,9 @@ const _abi = [
         type: "bool",
       },
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "amount",
-        type: "uint256",
+        type: "uint128",
       },
     ],
     stateMutability: "nonpayable",
@@ -772,12 +1102,62 @@ const _abi = [
         type: "uint256",
       },
       {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "newTimestamp",
-        type: "uint256",
+        type: "uint64",
       },
     ],
     name: "shift",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "x",
+        type: "uint256",
+      },
+    ],
+    name: "sqrt",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "y",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "pure",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bool",
+        name: "flag",
+        type: "bool",
+      },
+    ],
+    name: "stopAllConditions",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "conditionID",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "flag",
+        type: "bool",
+      },
+    ],
+    name: "stopCondition",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -787,9 +1167,9 @@ const _abi = [
     name: "totalLockedPayout",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "",
-        type: "uint256",
+        type: "uint128",
       },
     ],
     stateMutability: "view",
@@ -804,6 +1184,32 @@ const _abi = [
       },
     ],
     name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint128[]",
+        name: "data_",
+        type: "uint128[]",
+      },
+    ],
+    name: "updateMargins",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint128[]",
+        name: "data_",
+        type: "uint128[]",
+      },
+    ],
+    name: "updateReinforcements",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

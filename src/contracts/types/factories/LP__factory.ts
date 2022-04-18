@@ -61,6 +61,32 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
+        internalType: "uint128",
+        name: "newDAOFee",
+        type: "uint128",
+      },
+    ],
+    name: "DAORewardChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint128",
+        name: "newFrontFee",
+        type: "uint128",
+      },
+    ],
+    name: "FrontRewardChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: "address",
         name: "account",
@@ -137,15 +163,15 @@ const _abi = [
       },
       {
         indexed: false,
-        internalType: "uint256",
+        internalType: "uint64",
         name: "outcomeId",
-        type: "uint256",
+        type: "uint64",
       },
       {
         indexed: false,
-        internalType: "uint256",
+        internalType: "uint128",
         name: "amount",
-        type: "uint256",
+        type: "uint128",
       },
       {
         indexed: false,
@@ -155,18 +181,31 @@ const _abi = [
       },
       {
         indexed: false,
-        internalType: "uint256",
+        internalType: "uint128",
         name: "fund1",
-        type: "uint256",
+        type: "uint128",
       },
       {
         indexed: false,
-        internalType: "uint256",
+        internalType: "uint128",
         name: "fund2",
-        type: "uint256",
+        type: "uint128",
       },
     ],
     name: "NewBet",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint128",
+        name: "newOracleFee",
+        type: "uint128",
+      },
+    ],
+    name: "OracleRewardChanged",
     type: "event",
   },
   {
@@ -186,6 +225,19 @@ const _abi = [
       },
     ],
     name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint64",
+        name: "newPeriod",
+        type: "uint64",
+      },
+    ],
+    name: "PeriodChanged",
     type: "event",
   },
   {
@@ -214,6 +266,19 @@ const _abi = [
     type: "event",
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "newAzuroBet",
+        type: "address",
+      },
+    ],
+    name: "azuroBetChanged",
+    type: "event",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",
@@ -229,14 +294,14 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "initReserve",
-        type: "uint256",
+        type: "uint128",
       },
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "profitReserve",
-        type: "uint256",
+        type: "uint128",
       },
     ],
     name: "addReserve",
@@ -255,14 +320,19 @@ const _abi = [
     name: "affiliates",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "claimed",
-        type: "uint256",
+        type: "uint128",
       },
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "amount",
-        type: "uint256",
+        type: "uint128",
+      },
+      {
+        internalType: "uint128",
+        name: "totalFrontRewards",
+        type: "uint128",
       },
     ],
     stateMutability: "view",
@@ -356,24 +426,24 @@ const _abi = [
         type: "uint256",
       },
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "amount",
-        type: "uint256",
+        type: "uint128",
       },
       {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "outcomeID",
-        type: "uint256",
+        type: "uint64",
       },
       {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "deadline",
-        type: "uint256",
+        type: "uint64",
       },
       {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "minOdds",
-        type: "uint256",
+        type: "uint64",
       },
       {
         internalType: "address",
@@ -397,12 +467,25 @@ const _abi = [
     name: "bettingLiquidity",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "",
-        type: "uint256",
+        type: "uint128",
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "addr",
+        type: "address",
+      },
+    ],
+    name: "changeAzuroBet",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -421,9 +504,48 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint256",
+        internalType: "uint128",
+        name: "newDAOFee",
+        type: "uint128",
+      },
+    ],
+    name: "changeDAOReward",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint128",
+        name: "newFrontFee",
+        type: "uint128",
+      },
+    ],
+    name: "changeFrontReward",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint128",
+        name: "newOracleFee",
+        type: "uint128",
+      },
+    ],
+    name: "changeOracleReward",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint64",
         name: "newPeriod",
-        type: "uint256",
+        type: "uint64",
       },
     ],
     name: "changePeriod",
@@ -432,14 +554,8 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "newOdds_",
-        type: "uint256",
-      },
-    ],
-    name: "changeRewardOdds",
+    inputs: [],
+    name: "claimDAOReward",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -459,6 +575,19 @@ const _abi = [
         internalType: "contract ICore",
         name: "",
         type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "daoFee",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -505,6 +634,64 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "freezings",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "frontFee",
+    outputs: [
+      {
+        internalType: "uint128",
+        name: "",
+        type: "uint128",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "frozen",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getFeeDecimals",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "feeDecimals",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
         name: "wallet",
         type: "address",
       },
@@ -522,9 +709,22 @@ const _abi = [
         type: "uint256[3]",
       },
       {
-        internalType: "uint256[3]",
+        internalType: "uint256",
         name: "total",
-        type: "uint256[3]",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getOracleFee",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "fee",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -552,19 +752,6 @@ const _abi = [
       },
     ],
     name: "getPossibilityOfReinforcement",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "status",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getPossibilityOfReinforcementFromCore",
     outputs: [
       {
         internalType: "bool",
@@ -617,9 +804,9 @@ const _abi = [
     name: "initStartDate",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "",
-        type: "uint256",
+        type: "uint64",
       },
     ],
     stateMutability: "view",
@@ -638,9 +825,9 @@ const _abi = [
         type: "address",
       },
       {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "_periodLen",
-        type: "uint256",
+        type: "uint64",
       },
     ],
     name: "initialize",
@@ -664,9 +851,9 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "amount",
-        type: "uint256",
+        type: "uint128",
       },
     ],
     name: "lockReserve",
@@ -689,6 +876,19 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "multiplier",
+    outputs: [
+      {
+        internalType: "uint64",
+        name: "",
+        type: "uint64",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "name",
     outputs: [
       {
@@ -702,7 +902,7 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "oddsDecimals",
+    name: "oracleFee",
     outputs: [
       {
         internalType: "uint256",
@@ -737,9 +937,9 @@ const _abi = [
     name: "pendingReward",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "reward",
-        type: "uint256",
+        type: "uint128",
       },
     ],
     stateMutability: "view",
@@ -750,9 +950,9 @@ const _abi = [
     name: "periodLen",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "",
-        type: "uint256",
+        type: "uint64",
       },
     ],
     stateMutability: "view",
@@ -776,9 +976,9 @@ const _abi = [
     name: "reinforcementAbility",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "",
-        type: "uint256",
+        type: "uint128",
       },
     ],
     stateMutability: "view",
@@ -812,25 +1012,12 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "rewardFeeOdds",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
     name: "savedPeriods",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "",
-        type: "uint256",
+        type: "uint64",
       },
     ],
     stateMutability: "view",
@@ -840,11 +1027,16 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
-        name: "addr",
+        name: "_oracle",
         type: "address",
       },
+      {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
     ],
-    name: "setAzuroBet",
+    name: "sendOracleReward",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -880,9 +1072,9 @@ const _abi = [
     name: "totalBetsAmount",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "uint128",
         name: "",
-        type: "uint256",
+        type: "uint128",
       },
     ],
     stateMutability: "view",
@@ -890,7 +1082,7 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "totalReserve",
+    name: "totalDAORewards",
     outputs: [
       {
         internalType: "uint256",
@@ -903,7 +1095,20 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "totalRewards",
+    name: "totalFrontRewards",
+    outputs: [
+      {
+        internalType: "uint128",
+        name: "",
+        type: "uint128",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalReserve",
     outputs: [
       {
         internalType: "uint256",
@@ -994,6 +1199,26 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "unfreezeLiquidity",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "updateDateRatio",
+    outputs: [
+      {
+        internalType: "uint64",
+        name: "",
+        type: "uint64",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",
@@ -1018,13 +1243,7 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "amountLP",
-        type: "uint256",
-      },
-    ],
+    inputs: [],
     name: "withdrawLiquidity",
     outputs: [],
     stateMutability: "nonpayable",
@@ -1041,6 +1260,32 @@ const _abi = [
     name: "withdrawPayout",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "withdrawRatio",
+    outputs: [
+      {
+        internalType: "uint128",
+        name: "",
+        type: "uint128",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "workingReserve",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "available",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
 ];
