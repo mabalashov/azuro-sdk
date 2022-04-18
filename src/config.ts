@@ -8,7 +8,7 @@ const config: Config = {
   ipfsGateway: null,
 }
 
-export const configure = (_config: Partial<Config>) => {
+export const configure = (_config: Config) => {
   Object.entries(_config).forEach(([ key, value ]) => {
     config[key] = value
   })
