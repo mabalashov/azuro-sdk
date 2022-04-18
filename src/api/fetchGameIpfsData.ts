@@ -15,7 +15,6 @@ type IpfsData = {
 }
 
 type FormattedIpfsData = {
-  id: number
   league: string
   country: string
   participants: {
@@ -27,11 +26,13 @@ type FormattedIpfsData = {
 const fetchGameIpfsData = async (ipfsHash: string): Promise<FormattedIpfsData | null> => {
   try {
     // TODO IPFS response with 5xx sometimes, need to add retry - added on 6/21/21 by pavelivanov
-    const { data } = await axios.get(`${config.ipfsGateway}${ipfsHash}`)
-    const { gameId, entity1Name, entity1Image, entity2Name, entity2Image, titleCountry, titleLeague } = data as IpfsData
+    const { data } = await axios.get(`${config.ipfsGateway}${ipfsHash}`, {
+      timeout: 1500,
+    })
+
+    const { entity1Name, entity1Image, entity2Name, entity2Image, titleCountry, titleLeague } = data as IpfsData
 
     return {
-      id: gameId,
       country: titleCountry,
       league: titleLeague,
       participants: [

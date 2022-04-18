@@ -52,36 +52,44 @@ const fetchConditions = async (props: FetchConditionsProps = {}): Promise<Condit
   const events = await coreContract.queryFilter(createdFilter)
 
   const conditions = await Promise.all(events.map(async ({ args: { conditionID } }) => {
-    const id = conditionID.toNumber()
+    try {
+      const id = conditionID.toNumber()
 
-    const condition = await coreContract.getCondition(conditionID)
-    const state = condition.state
+      const condition = await coreContract.getCondition(conditionID)
+      const state = condition.state
+      const gameId = condition.scopeID.toNumber()
 
-    if (!resolved && state === ConditionStatus.RESOLVED) {
-      return
+      if (!resolved && state === ConditionStatus.RESOLVED) {
+        return
+      }
+
+      if (!canceled && state === ConditionStatus.CANCELED) {
+        return
+      }
+
+      const odds = _calculateInitialOdds(condition.fundBank, condition.margin)
+      const outcomes = condition.outcomes.map((value) => value.toNumber())
+
+      const startsAt = condition.timestamp.toNumber() * 1000
+      const ipfsHashArr = utils.arrayify(condition.ipfsHash)
+      const ipfsHash = utils.base58.encode([ 18, 32, ...ipfsHashArr ])
+      const gameData = await fetchGameIpfsData(ipfsHash)
+
+      return {
+        id,
+        outcomes,
+        odds,
+        gameInfo: {
+          id: gameId,
+          ...gameData,
+          state,
+          startsAt,
+        },
+      }
     }
-
-    if (!canceled && state === ConditionStatus.CANCELED) {
-      return
-    }
-
-    const odds = _calculateInitialOdds(condition.fundBank, condition.margin)
-    const outcomes = condition.outcomes.map((value) => value.toNumber())
-
-    const startsAt = condition.timestamp.toNumber() * 1000
-    const ipfsHashArr = utils.arrayify(condition.ipfsHash)
-    const ipfsHash = utils.base58.encode([ 18, 32, ...ipfsHashArr ])
-    const gameData = await fetchGameIpfsData(ipfsHash)
-
-    return {
-      id,
-      outcomes,
-      odds,
-      gameInfo: {
-        ...gameData,
-        state,
-        startsAt,
-      },
+    catch (err) {
+      console.error(err)
+      return null
     }
   }))
 
