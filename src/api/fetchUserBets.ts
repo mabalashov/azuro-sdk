@@ -33,7 +33,7 @@ const fetchBet = async (nftId: number) => {
     const outcomeBetId = rawOutcome.toNumber()
     const outcomeWinId = outcomeWin.toNumber()
 
-    const { outcomeRegistryId, paramId } = betTypeOdd[outcomeBetId]
+    const { marketRegistryId, outcomeRegistryId, paramId } = betTypeOdd[outcomeBetId]
 
     const rate = parseFloat(formatUnits(odds, RATE_DECIMALS))
     const amount = parseFloat(formatUnits(bigIntAmount, USDT_DECIMALS))
@@ -64,6 +64,7 @@ const fetchBet = async (nftId: number) => {
       nftId,
       conditionId,
       paramId,
+      marketRegistryId,
       outcomeRegistryId,
       rate,
       amount,
