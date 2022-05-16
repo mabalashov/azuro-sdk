@@ -1,10 +1,10 @@
-import type { Core, LP, Bet, ERC20 } from './types'
+import type { Core, LP, AzuroBet, TestERC20 } from './types'
 
 export type ContractsABI = {
   'core': Core
   'lp': LP
-  'bet': Bet
-  'usdt': ERC20
+  'bet': AzuroBet
+  'usdt': TestERC20
 }
 
 export type ContractName = keyof ContractsABI
