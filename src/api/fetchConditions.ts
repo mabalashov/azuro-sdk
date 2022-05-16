@@ -44,14 +44,14 @@ const fetchConditions = async (props?: FetchConditionsProps): Promise<Condition[
   const createdFilter = coreContract.filters.ConditionCreated()
   const events = await coreContract.queryFilter(createdFilter)
 
-  const conditions = await Promise.all(events.map(async ({ args: { conditionID } }) => {
+  const conditions = await Promise.all(events.map(async ({ args: { conditionId: rawConditionId } }) => {
     try {
-      const id = conditionID.toNumber()
+      const id = rawConditionId.toNumber()
 
-      const condition = await coreContract.getCondition(conditionID)
+      const condition = await coreContract.getCondition(rawConditionId)
 
       const state = condition.state
-      const gameId = condition.scopeID.toNumber()
+      const gameId = condition.scopeId.toNumber()
       const startsAt = condition.timestamp.toNumber() * 1000
 
       // filter already started games

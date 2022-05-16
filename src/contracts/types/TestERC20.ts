@@ -9,7 +9,6 @@ import {
   CallOverrides,
   ContractTransaction,
   Overrides,
-  PayableOverrides,
   PopulatedTransaction,
   Signer,
   utils,
@@ -18,8 +17,8 @@ import { FunctionFragment, Result, EventFragment } from "@ethersproject/abi";
 import { Listener, Provider } from "@ethersproject/providers";
 import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 
-export interface ERC20Interface extends utils.Interface {
-  contractName: "ERC20";
+export interface TestERC20Interface extends utils.Interface {
+  contractName: "TestERC20";
   functions: {
     "addPrivilegedAccounts(address,bool)": FunctionFragment;
     "allowance(address,address)": FunctionFragment;
@@ -27,19 +26,15 @@ export interface ERC20Interface extends utils.Interface {
     "availableToClaim(address)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "burn(address,uint256)": FunctionFragment;
-    "changePrice(uint256)": FunctionFragment;
     "claim(address)": FunctionFragment;
     "contestsDuration()": FunctionFragment;
     "contestsStartDate()": FunctionFragment;
     "decimals()": FunctionFragment;
     "decreaseAllowance(address,uint256)": FunctionFragment;
-    "ethBalance()": FunctionFragment;
-    "getTokens()": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
     "mint(address,uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
-    "price()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setContestDuration(uint256)": FunctionFragment;
     "setContestStartDate(uint256)": FunctionFragment;
@@ -72,10 +67,6 @@ export interface ERC20Interface extends utils.Interface {
     functionFragment: "burn",
     values: [string, BigNumberish]
   ): string;
-  encodeFunctionData(
-    functionFragment: "changePrice",
-    values: [BigNumberish]
-  ): string;
   encodeFunctionData(functionFragment: "claim", values: [string]): string;
   encodeFunctionData(
     functionFragment: "contestsDuration",
@@ -91,11 +82,6 @@ export interface ERC20Interface extends utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "ethBalance",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "getTokens", values?: undefined): string;
-  encodeFunctionData(
     functionFragment: "increaseAllowance",
     values: [string, BigNumberish]
   ): string;
@@ -105,7 +91,6 @@ export interface ERC20Interface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
-  encodeFunctionData(functionFragment: "price", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
@@ -149,10 +134,6 @@ export interface ERC20Interface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "changePrice",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "claim", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "contestsDuration",
@@ -167,8 +148,6 @@ export interface ERC20Interface extends utils.Interface {
     functionFragment: "decreaseAllowance",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "ethBalance", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "getTokens", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "increaseAllowance",
     data: BytesLike
@@ -176,7 +155,6 @@ export interface ERC20Interface extends utils.Interface {
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "price", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
@@ -238,13 +216,13 @@ export type TransferEvent = TypedEvent<
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
 
-export interface ERC20 extends BaseContract {
-  contractName: "ERC20";
+export interface TestERC20 extends BaseContract {
+  contractName: "TestERC20";
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: ERC20Interface;
+  interface: TestERC20Interface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -297,11 +275,6 @@ export interface ERC20 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    changePrice(
-      newPrice: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     claim(
       account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -319,12 +292,6 @@ export interface ERC20 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    ethBalance(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    getTokens(
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     increaseAllowance(
       spender: string,
       addedValue: BigNumberish,
@@ -340,8 +307,6 @@ export interface ERC20 extends BaseContract {
     name(overrides?: CallOverrides): Promise<[string]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
-
-    price(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -415,11 +380,6 @@ export interface ERC20 extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  changePrice(
-    newPrice: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   claim(
     account: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -437,12 +397,6 @@ export interface ERC20 extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  ethBalance(overrides?: CallOverrides): Promise<BigNumber>;
-
-  getTokens(
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   increaseAllowance(
     spender: string,
     addedValue: BigNumberish,
@@ -458,8 +412,6 @@ export interface ERC20 extends BaseContract {
   name(overrides?: CallOverrides): Promise<string>;
 
   owner(overrides?: CallOverrides): Promise<string>;
-
-  price(overrides?: CallOverrides): Promise<BigNumber>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -533,11 +485,6 @@ export interface ERC20 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    changePrice(
-      newPrice: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     claim(account: string, overrides?: CallOverrides): Promise<void>;
 
     contestsDuration(overrides?: CallOverrides): Promise<BigNumber>;
@@ -551,10 +498,6 @@ export interface ERC20 extends BaseContract {
       subtractedValue: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
-
-    ethBalance(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getTokens(overrides?: CallOverrides): Promise<void>;
 
     increaseAllowance(
       spender: string,
@@ -571,8 +514,6 @@ export interface ERC20 extends BaseContract {
     name(overrides?: CallOverrides): Promise<string>;
 
     owner(overrides?: CallOverrides): Promise<string>;
-
-    price(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -676,11 +617,6 @@ export interface ERC20 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    changePrice(
-      newPrice: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     claim(
       account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -698,12 +634,6 @@ export interface ERC20 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    ethBalance(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getTokens(
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     increaseAllowance(
       spender: string,
       addedValue: BigNumberish,
@@ -719,8 +649,6 @@ export interface ERC20 extends BaseContract {
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
-
-    price(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -798,11 +726,6 @@ export interface ERC20 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    changePrice(
-      newPrice: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     claim(
       account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -820,12 +743,6 @@ export interface ERC20 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    ethBalance(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getTokens(
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     increaseAllowance(
       spender: string,
       addedValue: BigNumberish,
@@ -841,8 +758,6 @@ export interface ERC20 extends BaseContract {
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    price(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }

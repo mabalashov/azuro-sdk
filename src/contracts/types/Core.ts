@@ -24,12 +24,13 @@ export declare namespace ICore {
     totalNetBets: [BigNumberish, BigNumberish];
     reinforcement: BigNumberish;
     margin: BigNumberish;
-    outcomes: [BigNumberish, BigNumberish];
     ipfsHash: BytesLike;
-    scopeID: BigNumberish;
+    outcomes: [BigNumberish, BigNumberish];
+    scopeId: BigNumberish;
     outcomeWin: BigNumberish;
     timestamp: BigNumberish;
     state: BigNumberish;
+    leaf: BigNumberish;
   };
 
   export type ConditionStructOutput = [
@@ -38,11 +39,12 @@ export declare namespace ICore {
     [BigNumber, BigNumber],
     BigNumber,
     BigNumber,
-    [BigNumber, BigNumber],
     string,
+    [BigNumber, BigNumber],
     BigNumber,
     BigNumber,
     BigNumber,
+    number,
     number
   ] & {
     fundBank: [BigNumber, BigNumber];
@@ -50,30 +52,30 @@ export declare namespace ICore {
     totalNetBets: [BigNumber, BigNumber];
     reinforcement: BigNumber;
     margin: BigNumber;
-    outcomes: [BigNumber, BigNumber];
     ipfsHash: string;
-    scopeID: BigNumber;
+    outcomes: [BigNumber, BigNumber];
+    scopeId: BigNumber;
     outcomeWin: BigNumber;
     timestamp: BigNumber;
     state: number;
+    leaf: number;
   };
 }
 
 export interface CoreInterface extends utils.Interface {
   contractName: "Core";
   functions: {
+    "LP()": FunctionFragment;
     "addMaintainer(address,bool)": FunctionFragment;
-    "addMargin(uint256,uint256,uint256)": FunctionFragment;
-    "allConditionStopped()": FunctionFragment;
+    "allConditionsStopped()": FunctionFragment;
     "bets(uint256)": FunctionFragment;
     "calculateOdds(uint256,uint128,uint64)": FunctionFragment;
-    "cancel(uint256)": FunctionFragment;
     "cancelByMaintainer(uint256)": FunctionFragment;
-    "ceil(uint256,uint256,uint256)": FunctionFragment;
+    "cancelByOracle(uint256)": FunctionFragment;
+    "ceil(uint256,uint256)": FunctionFragment;
     "changeMaxBanksRatio(uint64)": FunctionFragment;
     "conditions(uint256)": FunctionFragment;
     "createCondition(uint256,uint128,uint64[2],uint64[2],uint64,bytes32)": FunctionFragment;
-    "decimals()": FunctionFragment;
     "defaultMargin()": FunctionFragment;
     "defaultReinforcement()": FunctionFragment;
     "getBetInfo(uint256)": FunctionFragment;
@@ -88,18 +90,19 @@ export interface CoreInterface extends utils.Interface {
     "isOracle(address)": FunctionFragment;
     "isOutComeCorrect(uint256,uint256)": FunctionFragment;
     "lastConditionId()": FunctionFragment;
-    "lpAddress()": FunctionFragment;
     "maintainers(address)": FunctionFragment;
+    "marginAdjustedOdds(uint256,uint256,uint256)": FunctionFragment;
     "maxBanksRatio()": FunctionFragment;
-    "oracleConditionIDs(address,uint256)": FunctionFragment;
+    "multiplier()": FunctionFragment;
+    "oracleConditionIds(address,uint256)": FunctionFragment;
     "oracles(address)": FunctionFragment;
     "owner()": FunctionFragment;
-    "putBet(uint256,uint256,uint128,uint64,uint64,address)": FunctionFragment;
+    "putBet(uint256,uint256,uint128,uint64,uint64)": FunctionFragment;
     "renounceOracle(address)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "resolveCondition(uint256,uint64)": FunctionFragment;
     "resolvePayout(uint256)": FunctionFragment;
-    "setLP(address)": FunctionFragment;
+    "setLp(address)": FunctionFragment;
     "setOracle(address)": FunctionFragment;
     "shift(uint256,uint64)": FunctionFragment;
     "sqrt(uint256)": FunctionFragment;
@@ -112,16 +115,13 @@ export interface CoreInterface extends utils.Interface {
     "viewPayout(uint256)": FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: "LP", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "addMaintainer",
     values: [string, boolean]
   ): string;
   encodeFunctionData(
-    functionFragment: "addMargin",
-    values: [BigNumberish, BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "allConditionStopped",
+    functionFragment: "allConditionsStopped",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "bets", values: [BigNumberish]): string;
@@ -130,16 +130,16 @@ export interface CoreInterface extends utils.Interface {
     values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "cancel",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "cancelByMaintainer",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "cancelByOracle",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "ceil",
-    values: [BigNumberish, BigNumberish, BigNumberish]
+    values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "changeMaxBanksRatio",
@@ -160,7 +160,6 @@ export interface CoreInterface extends utils.Interface {
       BytesLike
     ]
   ): string;
-  encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "defaultMargin",
     values?: undefined
@@ -221,14 +220,21 @@ export interface CoreInterface extends utils.Interface {
     functionFragment: "lastConditionId",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "lpAddress", values?: undefined): string;
   encodeFunctionData(functionFragment: "maintainers", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "marginAdjustedOdds",
+    values: [BigNumberish, BigNumberish, BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "maxBanksRatio",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "oracleConditionIDs",
+    functionFragment: "multiplier",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "oracleConditionIds",
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "oracles", values: [string]): string;
@@ -240,8 +246,7 @@ export interface CoreInterface extends utils.Interface {
       BigNumberish,
       BigNumberish,
       BigNumberish,
-      BigNumberish,
-      string
+      BigNumberish
     ]
   ): string;
   encodeFunctionData(
@@ -260,7 +265,7 @@ export interface CoreInterface extends utils.Interface {
     functionFragment: "resolvePayout",
     values: [BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "setLP", values: [string]): string;
+  encodeFunctionData(functionFragment: "setLp", values: [string]): string;
   encodeFunctionData(functionFragment: "setOracle", values: [string]): string;
   encodeFunctionData(
     functionFragment: "shift",
@@ -296,13 +301,13 @@ export interface CoreInterface extends utils.Interface {
     values: [BigNumberish]
   ): string;
 
+  decodeFunctionResult(functionFragment: "LP", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "addMaintainer",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "addMargin", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "allConditionStopped",
+    functionFragment: "allConditionsStopped",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "bets", data: BytesLike): Result;
@@ -310,9 +315,12 @@ export interface CoreInterface extends utils.Interface {
     functionFragment: "calculateOdds",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "cancel", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "cancelByMaintainer",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "cancelByOracle",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "ceil", data: BytesLike): Result;
@@ -325,7 +333,6 @@ export interface CoreInterface extends utils.Interface {
     functionFragment: "createCondition",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "defaultMargin",
     data: BytesLike
@@ -370,17 +377,21 @@ export interface CoreInterface extends utils.Interface {
     functionFragment: "lastConditionId",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "lpAddress", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "maintainers",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "marginAdjustedOdds",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "maxBanksRatio",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "multiplier", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "oracleConditionIDs",
+    functionFragment: "oracleConditionIds",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "oracles", data: BytesLike): Result;
@@ -402,7 +413,7 @@ export interface CoreInterface extends utils.Interface {
     functionFragment: "resolvePayout",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "setLP", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setLp", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setOracle", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "shift", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "sqrt", data: BytesLike): Result;
@@ -433,33 +444,43 @@ export interface CoreInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "viewPayout", data: BytesLike): Result;
 
   events: {
+    "AllConditionsStopped(bool)": EventFragment;
     "ConditionCreated(uint256,uint256,uint64)": EventFragment;
     "ConditionResolved(uint256,uint256,uint64,uint8,uint256)": EventFragment;
     "ConditionShifted(uint256,uint64)": EventFragment;
-    "LPChanged(address)": EventFragment;
+    "ConditionStopped(uint256,bool)": EventFragment;
+    "LpChanged(address)": EventFragment;
     "MaintainerUpdated(address,bool)": EventFragment;
+    "MaxBanksRatioChanged(uint64)": EventFragment;
     "OracleAdded(address)": EventFragment;
     "OracleRenounced(address)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
-    "allConditionsStoped(bool)": EventFragment;
-    "conditionStoped(uint256,bool)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "AllConditionsStopped"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ConditionCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ConditionResolved"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ConditionShifted"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "LPChanged"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ConditionStopped"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LpChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "MaintainerUpdated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "MaxBanksRatioChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OracleAdded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OracleRenounced"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "allConditionsStoped"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "conditionStoped"): EventFragment;
 }
+
+export type AllConditionsStoppedEvent = TypedEvent<
+  [boolean],
+  { flag: boolean }
+>;
+
+export type AllConditionsStoppedEventFilter =
+  TypedEventFilter<AllConditionsStoppedEvent>;
 
 export type ConditionCreatedEvent = TypedEvent<
   [BigNumber, BigNumber, BigNumber],
-  { oracleConditionID: BigNumber; conditionID: BigNumber; timestamp: BigNumber }
+  { oracleConditionId: BigNumber; conditionId: BigNumber; timestamp: BigNumber }
 >;
 
 export type ConditionCreatedEventFilter =
@@ -468,11 +489,11 @@ export type ConditionCreatedEventFilter =
 export type ConditionResolvedEvent = TypedEvent<
   [BigNumber, BigNumber, BigNumber, number, BigNumber],
   {
-    oracleConditionID: BigNumber;
-    conditionID: BigNumber;
+    oracleConditionId: BigNumber;
+    conditionId: BigNumber;
     outcomeWin: BigNumber;
     state: number;
-    amountForLP: BigNumber;
+    amountForLp: BigNumber;
   }
 >;
 
@@ -481,15 +502,23 @@ export type ConditionResolvedEventFilter =
 
 export type ConditionShiftedEvent = TypedEvent<
   [BigNumber, BigNumber],
-  { conditionID: BigNumber; newTimestamp: BigNumber }
+  { conditionId: BigNumber; newTimestamp: BigNumber }
 >;
 
 export type ConditionShiftedEventFilter =
   TypedEventFilter<ConditionShiftedEvent>;
 
-export type LPChangedEvent = TypedEvent<[string], { newLP: string }>;
+export type ConditionStoppedEvent = TypedEvent<
+  [BigNumber, boolean],
+  { conditionId: BigNumber; flag: boolean }
+>;
 
-export type LPChangedEventFilter = TypedEventFilter<LPChangedEvent>;
+export type ConditionStoppedEventFilter =
+  TypedEventFilter<ConditionStoppedEvent>;
+
+export type LpChangedEvent = TypedEvent<[string], { newLp: string }>;
+
+export type LpChangedEventFilter = TypedEventFilter<LpChangedEvent>;
 
 export type MaintainerUpdatedEvent = TypedEvent<
   [string, boolean],
@@ -498,6 +527,14 @@ export type MaintainerUpdatedEvent = TypedEvent<
 
 export type MaintainerUpdatedEventFilter =
   TypedEventFilter<MaintainerUpdatedEvent>;
+
+export type MaxBanksRatioChangedEvent = TypedEvent<
+  [BigNumber],
+  { newRatio: BigNumber }
+>;
+
+export type MaxBanksRatioChangedEventFilter =
+  TypedEventFilter<MaxBanksRatioChangedEvent>;
 
 export type OracleAddedEvent = TypedEvent<[string], { newOracle: string }>;
 
@@ -514,18 +551,6 @@ export type OwnershipTransferredEvent = TypedEvent<
 
 export type OwnershipTransferredEventFilter =
   TypedEventFilter<OwnershipTransferredEvent>;
-
-export type allConditionsStopedEvent = TypedEvent<[boolean], { flag: boolean }>;
-
-export type allConditionsStopedEventFilter =
-  TypedEventFilter<allConditionsStopedEvent>;
-
-export type conditionStopedEvent = TypedEvent<
-  [BigNumber, boolean],
-  { conditionID: BigNumber; flag: boolean }
->;
-
-export type conditionStopedEventFilter = TypedEventFilter<conditionStopedEvent>;
 
 export interface Core extends BaseContract {
   contractName: "Core";
@@ -555,70 +580,55 @@ export interface Core extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    LP(overrides?: CallOverrides): Promise<[string]>;
+
     addMaintainer(
       maintainer: string,
       active: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    addMargin(
-      odds: BigNumberish,
-      marginality: BigNumberish,
-      decimals: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { newOdds: BigNumber }>;
-
-    allConditionStopped(overrides?: CallOverrides): Promise<[boolean]>;
+    allConditionsStopped(overrides?: CallOverrides): Promise<[boolean]>;
 
     bets(
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        string,
-        BigNumber,
-        boolean
-      ] & {
-        conditionID: BigNumber;
+      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, boolean] & {
+        conditionId: BigNumber;
         amount: BigNumber;
         outcome: BigNumber;
         createdAt: BigNumber;
-        affiliate: string;
         odds: BigNumber;
         payed: boolean;
       }
     >;
 
     calculateOdds(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       amount: BigNumberish,
-      outcomeWin: BigNumberish,
+      outcome: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { odds: BigNumber }>;
 
-    cancel(
-      oracleConditionID: BigNumberish,
+    cancelByMaintainer(
+      conditionId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    cancelByMaintainer(
-      conditionID: BigNumberish,
+    cancelByOracle(
+      oracleConditionId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     ceil(
       a: BigNumberish,
       m: BigNumberish,
-      decimals: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
     changeMaxBanksRatio(
-      newRatio_: BigNumberish,
+      newRatio: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -633,29 +643,29 @@ export interface Core extends BaseContract {
         BigNumber,
         BigNumber,
         BigNumber,
+        number,
         number
       ] & {
         reinforcement: BigNumber;
         margin: BigNumber;
         ipfsHash: string;
-        scopeID: BigNumber;
+        scopeId: BigNumber;
         outcomeWin: BigNumber;
         timestamp: BigNumber;
         state: number;
+        leaf: number;
       }
     >;
 
     createCondition(
-      oracleCondID: BigNumberish,
-      scopeID: BigNumberish,
+      oracleCondId: BigNumberish,
+      scopeId: BigNumberish,
       odds: [BigNumberish, BigNumberish],
       outcomes: [BigNumberish, BigNumberish],
       timestamp: BigNumberish,
       ipfsHash: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    decimals(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     defaultMargin(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -665,78 +675,81 @@ export interface Core extends BaseContract {
       betId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber, string] & {
+      [BigNumber, BigNumber, BigNumber] & {
         amount: BigNumber;
         odds: BigNumber;
         createdAt: BigNumber;
-        affiliate: string;
       }
     >;
 
     getCondition(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[ICore.ConditionStructOutput]>;
 
     getConditionFunds(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[[BigNumber, BigNumber]] & { fundBank: [BigNumber, BigNumber] }>;
 
     getConditionReinforcement(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { reinforcement: BigNumber }>;
 
     getLockedPayout(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getMargin(
-      outcomeId_: BigNumberish,
+      outcomeId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
     getOddsFromBanks(
-      fund1Bank_: BigNumberish,
-      fund2Bank_: BigNumberish,
-      amount_: BigNumberish,
-      outcomeIndex_: BigNumberish,
-      marginality_: BigNumberish,
-      decimals_: BigNumberish,
+      fund1Bank: BigNumberish,
+      fund2Bank: BigNumberish,
+      amount: BigNumberish,
+      outcomeIndex: BigNumberish,
+      margin: BigNumberish,
+      multiplier: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
     getReinforcement(
-      outcomeId_: BigNumberish,
+      outcomeId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
     initialize(
-      reinforcement_: BigNumberish,
-      oracle_: string,
-      margin_: BigNumberish,
+      reinforcement: BigNumberish,
+      oracle: string,
+      margin: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    isOracle(
-      oracleWallet: string,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+    isOracle(oracle: string, overrides?: CallOverrides): Promise<[boolean]>;
 
     isOutComeCorrect(
-      conditionID: BigNumberish,
-      outcomeWin: BigNumberish,
+      conditionId: BigNumberish,
+      outcome: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[boolean] & { correct: boolean }>;
 
     lastConditionId(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    lpAddress(overrides?: CallOverrides): Promise<[string]>;
-
     maintainers(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
+
+    marginAdjustedOdds(
+      odds: BigNumberish,
+      marginality: BigNumberish,
+      multiplier: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { newOdds: BigNumber }>;
 
     maxBanksRatio(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    oracleConditionIDs(
+    multiplier(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    oracleConditionIds(
       arg0: string,
       arg1: BigNumberish,
       overrides?: CallOverrides
@@ -747,17 +760,16 @@ export interface Core extends BaseContract {
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     putBet(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       tokenId: BigNumberish,
       amount: BigNumberish,
-      outcomeWin: BigNumberish,
+      outcome: BigNumberish,
       minOdds: BigNumberish,
-      affiliate: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     renounceOracle(
-      oracle_: string,
+      oracle: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -766,28 +778,28 @@ export interface Core extends BaseContract {
     ): Promise<ContractTransaction>;
 
     resolveCondition(
-      oracleCondID: BigNumberish,
+      oracleCondId: BigNumberish,
       outcomeWin: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     resolvePayout(
-      tokenID: BigNumberish,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setLP(
-      lpAddress_: string,
+    setLp(
+      lp: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     setOracle(
-      oracle_: string,
+      oracle: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     shift(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       newTimestamp: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -803,7 +815,7 @@ export interface Core extends BaseContract {
     ): Promise<ContractTransaction>;
 
     stopCondition(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       flag: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -816,20 +828,22 @@ export interface Core extends BaseContract {
     ): Promise<ContractTransaction>;
 
     updateMargins(
-      data_: BigNumberish[],
+      data: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     updateReinforcements(
-      data_: BigNumberish[],
+      data: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     viewPayout(
-      tokenID_: BigNumberish,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[boolean, BigNumber] & { success: boolean; amount: BigNumber }>;
   };
+
+  LP(overrides?: CallOverrides): Promise<string>;
 
   addMaintainer(
     maintainer: string,
@@ -837,56 +851,47 @@ export interface Core extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  addMargin(
-    odds: BigNumberish,
-    marginality: BigNumberish,
-    decimals: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  allConditionStopped(overrides?: CallOverrides): Promise<boolean>;
+  allConditionsStopped(overrides?: CallOverrides): Promise<boolean>;
 
   bets(
     arg0: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [BigNumber, BigNumber, BigNumber, BigNumber, string, BigNumber, boolean] & {
-      conditionID: BigNumber;
+    [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, boolean] & {
+      conditionId: BigNumber;
       amount: BigNumber;
       outcome: BigNumber;
       createdAt: BigNumber;
-      affiliate: string;
       odds: BigNumber;
       payed: boolean;
     }
   >;
 
   calculateOdds(
-    conditionID: BigNumberish,
+    conditionId: BigNumberish,
     amount: BigNumberish,
-    outcomeWin: BigNumberish,
+    outcome: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  cancel(
-    oracleConditionID: BigNumberish,
+  cancelByMaintainer(
+    conditionId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  cancelByMaintainer(
-    conditionID: BigNumberish,
+  cancelByOracle(
+    oracleConditionId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   ceil(
     a: BigNumberish,
     m: BigNumberish,
-    decimals: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
   changeMaxBanksRatio(
-    newRatio_: BigNumberish,
+    newRatio: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -894,28 +899,36 @@ export interface Core extends BaseContract {
     arg0: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [BigNumber, BigNumber, string, BigNumber, BigNumber, BigNumber, number] & {
+    [
+      BigNumber,
+      BigNumber,
+      string,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      number,
+      number
+    ] & {
       reinforcement: BigNumber;
       margin: BigNumber;
       ipfsHash: string;
-      scopeID: BigNumber;
+      scopeId: BigNumber;
       outcomeWin: BigNumber;
       timestamp: BigNumber;
       state: number;
+      leaf: number;
     }
   >;
 
   createCondition(
-    oracleCondID: BigNumberish,
-    scopeID: BigNumberish,
+    oracleCondId: BigNumberish,
+    scopeId: BigNumberish,
     odds: [BigNumberish, BigNumberish],
     outcomes: [BigNumberish, BigNumberish],
     timestamp: BigNumberish,
     ipfsHash: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  decimals(overrides?: CallOverrides): Promise<BigNumber>;
 
   defaultMargin(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -925,75 +938,81 @@ export interface Core extends BaseContract {
     betId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [BigNumber, BigNumber, BigNumber, string] & {
+    [BigNumber, BigNumber, BigNumber] & {
       amount: BigNumber;
       odds: BigNumber;
       createdAt: BigNumber;
-      affiliate: string;
     }
   >;
 
   getCondition(
-    conditionID: BigNumberish,
+    conditionId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<ICore.ConditionStructOutput>;
 
   getConditionFunds(
-    conditionID: BigNumberish,
+    conditionId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<[BigNumber, BigNumber]>;
 
   getConditionReinforcement(
-    conditionID: BigNumberish,
+    conditionId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
   getLockedPayout(overrides?: CallOverrides): Promise<BigNumber>;
 
   getMargin(
-    outcomeId_: BigNumberish,
+    outcomeId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
   getOddsFromBanks(
-    fund1Bank_: BigNumberish,
-    fund2Bank_: BigNumberish,
-    amount_: BigNumberish,
-    outcomeIndex_: BigNumberish,
-    marginality_: BigNumberish,
-    decimals_: BigNumberish,
+    fund1Bank: BigNumberish,
+    fund2Bank: BigNumberish,
+    amount: BigNumberish,
+    outcomeIndex: BigNumberish,
+    margin: BigNumberish,
+    multiplier: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
   getReinforcement(
-    outcomeId_: BigNumberish,
+    outcomeId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
   initialize(
-    reinforcement_: BigNumberish,
-    oracle_: string,
-    margin_: BigNumberish,
+    reinforcement: BigNumberish,
+    oracle: string,
+    margin: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  isOracle(oracleWallet: string, overrides?: CallOverrides): Promise<boolean>;
+  isOracle(oracle: string, overrides?: CallOverrides): Promise<boolean>;
 
   isOutComeCorrect(
-    conditionID: BigNumberish,
-    outcomeWin: BigNumberish,
+    conditionId: BigNumberish,
+    outcome: BigNumberish,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
   lastConditionId(overrides?: CallOverrides): Promise<BigNumber>;
 
-  lpAddress(overrides?: CallOverrides): Promise<string>;
-
   maintainers(arg0: string, overrides?: CallOverrides): Promise<boolean>;
+
+  marginAdjustedOdds(
+    odds: BigNumberish,
+    marginality: BigNumberish,
+    multiplier: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   maxBanksRatio(overrides?: CallOverrides): Promise<BigNumber>;
 
-  oracleConditionIDs(
+  multiplier(overrides?: CallOverrides): Promise<BigNumber>;
+
+  oracleConditionIds(
     arg0: string,
     arg1: BigNumberish,
     overrides?: CallOverrides
@@ -1004,17 +1023,16 @@ export interface Core extends BaseContract {
   owner(overrides?: CallOverrides): Promise<string>;
 
   putBet(
-    conditionID: BigNumberish,
+    conditionId: BigNumberish,
     tokenId: BigNumberish,
     amount: BigNumberish,
-    outcomeWin: BigNumberish,
+    outcome: BigNumberish,
     minOdds: BigNumberish,
-    affiliate: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   renounceOracle(
-    oracle_: string,
+    oracle: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1023,28 +1041,28 @@ export interface Core extends BaseContract {
   ): Promise<ContractTransaction>;
 
   resolveCondition(
-    oracleCondID: BigNumberish,
+    oracleCondId: BigNumberish,
     outcomeWin: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   resolvePayout(
-    tokenID: BigNumberish,
+    tokenId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setLP(
-    lpAddress_: string,
+  setLp(
+    lp: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   setOracle(
-    oracle_: string,
+    oracle: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   shift(
-    conditionID: BigNumberish,
+    conditionId: BigNumberish,
     newTimestamp: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -1057,7 +1075,7 @@ export interface Core extends BaseContract {
   ): Promise<ContractTransaction>;
 
   stopCondition(
-    conditionID: BigNumberish,
+    conditionId: BigNumberish,
     flag: boolean,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -1070,85 +1088,70 @@ export interface Core extends BaseContract {
   ): Promise<ContractTransaction>;
 
   updateMargins(
-    data_: BigNumberish[],
+    data: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   updateReinforcements(
-    data_: BigNumberish[],
+    data: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   viewPayout(
-    tokenID_: BigNumberish,
+    tokenId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<[boolean, BigNumber] & { success: boolean; amount: BigNumber }>;
 
   callStatic: {
+    LP(overrides?: CallOverrides): Promise<string>;
+
     addMaintainer(
       maintainer: string,
       active: boolean,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    addMargin(
-      odds: BigNumberish,
-      marginality: BigNumberish,
-      decimals: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    allConditionStopped(overrides?: CallOverrides): Promise<boolean>;
+    allConditionsStopped(overrides?: CallOverrides): Promise<boolean>;
 
     bets(
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        string,
-        BigNumber,
-        boolean
-      ] & {
-        conditionID: BigNumber;
+      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, boolean] & {
+        conditionId: BigNumber;
         amount: BigNumber;
         outcome: BigNumber;
         createdAt: BigNumber;
-        affiliate: string;
         odds: BigNumber;
         payed: boolean;
       }
     >;
 
     calculateOdds(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       amount: BigNumberish,
-      outcomeWin: BigNumberish,
+      outcome: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    cancel(
-      oracleConditionID: BigNumberish,
+    cancelByMaintainer(
+      conditionId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    cancelByMaintainer(
-      conditionID: BigNumberish,
+    cancelByOracle(
+      oracleConditionId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
     ceil(
       a: BigNumberish,
       m: BigNumberish,
-      decimals: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     changeMaxBanksRatio(
-      newRatio_: BigNumberish,
+      newRatio: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1163,29 +1166,29 @@ export interface Core extends BaseContract {
         BigNumber,
         BigNumber,
         BigNumber,
+        number,
         number
       ] & {
         reinforcement: BigNumber;
         margin: BigNumber;
         ipfsHash: string;
-        scopeID: BigNumber;
+        scopeId: BigNumber;
         outcomeWin: BigNumber;
         timestamp: BigNumber;
         state: number;
+        leaf: number;
       }
     >;
 
     createCondition(
-      oracleCondID: BigNumberish,
-      scopeID: BigNumberish,
+      oracleCondId: BigNumberish,
+      scopeId: BigNumberish,
       odds: [BigNumberish, BigNumberish],
       outcomes: [BigNumberish, BigNumberish],
       timestamp: BigNumberish,
       ipfsHash: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    decimals(overrides?: CallOverrides): Promise<BigNumber>;
 
     defaultMargin(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1195,75 +1198,81 @@ export interface Core extends BaseContract {
       betId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber, string] & {
+      [BigNumber, BigNumber, BigNumber] & {
         amount: BigNumber;
         odds: BigNumber;
         createdAt: BigNumber;
-        affiliate: string;
       }
     >;
 
     getCondition(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<ICore.ConditionStructOutput>;
 
     getConditionFunds(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber, BigNumber]>;
 
     getConditionReinforcement(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getLockedPayout(overrides?: CallOverrides): Promise<BigNumber>;
 
     getMargin(
-      outcomeId_: BigNumberish,
+      outcomeId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getOddsFromBanks(
-      fund1Bank_: BigNumberish,
-      fund2Bank_: BigNumberish,
-      amount_: BigNumberish,
-      outcomeIndex_: BigNumberish,
-      marginality_: BigNumberish,
-      decimals_: BigNumberish,
+      fund1Bank: BigNumberish,
+      fund2Bank: BigNumberish,
+      amount: BigNumberish,
+      outcomeIndex: BigNumberish,
+      margin: BigNumberish,
+      multiplier: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getReinforcement(
-      outcomeId_: BigNumberish,
+      outcomeId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     initialize(
-      reinforcement_: BigNumberish,
-      oracle_: string,
-      margin_: BigNumberish,
+      reinforcement: BigNumberish,
+      oracle: string,
+      margin: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    isOracle(oracleWallet: string, overrides?: CallOverrides): Promise<boolean>;
+    isOracle(oracle: string, overrides?: CallOverrides): Promise<boolean>;
 
     isOutComeCorrect(
-      conditionID: BigNumberish,
-      outcomeWin: BigNumberish,
+      conditionId: BigNumberish,
+      outcome: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
     lastConditionId(overrides?: CallOverrides): Promise<BigNumber>;
 
-    lpAddress(overrides?: CallOverrides): Promise<string>;
-
     maintainers(arg0: string, overrides?: CallOverrides): Promise<boolean>;
+
+    marginAdjustedOdds(
+      odds: BigNumberish,
+      marginality: BigNumberish,
+      multiplier: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     maxBanksRatio(overrides?: CallOverrides): Promise<BigNumber>;
 
-    oracleConditionIDs(
+    multiplier(overrides?: CallOverrides): Promise<BigNumber>;
+
+    oracleConditionIds(
       arg0: string,
       arg1: BigNumberish,
       overrides?: CallOverrides
@@ -1274,36 +1283,35 @@ export interface Core extends BaseContract {
     owner(overrides?: CallOverrides): Promise<string>;
 
     putBet(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       tokenId: BigNumberish,
       amount: BigNumberish,
-      outcomeWin: BigNumberish,
+      outcome: BigNumberish,
       minOdds: BigNumberish,
-      affiliate: string,
       overrides?: CallOverrides
     ): Promise<[BigNumber, BigNumber, BigNumber]>;
 
-    renounceOracle(oracle_: string, overrides?: CallOverrides): Promise<void>;
+    renounceOracle(oracle: string, overrides?: CallOverrides): Promise<void>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
     resolveCondition(
-      oracleCondID: BigNumberish,
+      oracleCondId: BigNumberish,
       outcomeWin: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
     resolvePayout(
-      tokenID: BigNumberish,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[boolean, BigNumber] & { success: boolean; amount: BigNumber }>;
 
-    setLP(lpAddress_: string, overrides?: CallOverrides): Promise<void>;
+    setLp(lp: string, overrides?: CallOverrides): Promise<void>;
 
-    setOracle(oracle_: string, overrides?: CallOverrides): Promise<void>;
+    setOracle(oracle: string, overrides?: CallOverrides): Promise<void>;
 
     shift(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       newTimestamp: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -1313,7 +1321,7 @@ export interface Core extends BaseContract {
     stopAllConditions(flag: boolean, overrides?: CallOverrides): Promise<void>;
 
     stopCondition(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       flag: boolean,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -1326,59 +1334,71 @@ export interface Core extends BaseContract {
     ): Promise<void>;
 
     updateMargins(
-      data_: BigNumberish[],
+      data: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
 
     updateReinforcements(
-      data_: BigNumberish[],
+      data: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
 
     viewPayout(
-      tokenID_: BigNumberish,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[boolean, BigNumber] & { success: boolean; amount: BigNumber }>;
   };
 
   filters: {
+    "AllConditionsStopped(bool)"(flag?: null): AllConditionsStoppedEventFilter;
+    AllConditionsStopped(flag?: null): AllConditionsStoppedEventFilter;
+
     "ConditionCreated(uint256,uint256,uint64)"(
-      oracleConditionID?: BigNumberish | null,
-      conditionID?: BigNumberish | null,
+      oracleConditionId?: BigNumberish | null,
+      conditionId?: BigNumberish | null,
       timestamp?: null
     ): ConditionCreatedEventFilter;
     ConditionCreated(
-      oracleConditionID?: BigNumberish | null,
-      conditionID?: BigNumberish | null,
+      oracleConditionId?: BigNumberish | null,
+      conditionId?: BigNumberish | null,
       timestamp?: null
     ): ConditionCreatedEventFilter;
 
     "ConditionResolved(uint256,uint256,uint64,uint8,uint256)"(
-      oracleConditionID?: BigNumberish | null,
-      conditionID?: BigNumberish | null,
+      oracleConditionId?: BigNumberish | null,
+      conditionId?: BigNumberish | null,
       outcomeWin?: null,
       state?: null,
-      amountForLP?: null
+      amountForLp?: null
     ): ConditionResolvedEventFilter;
     ConditionResolved(
-      oracleConditionID?: BigNumberish | null,
-      conditionID?: BigNumberish | null,
+      oracleConditionId?: BigNumberish | null,
+      conditionId?: BigNumberish | null,
       outcomeWin?: null,
       state?: null,
-      amountForLP?: null
+      amountForLp?: null
     ): ConditionResolvedEventFilter;
 
     "ConditionShifted(uint256,uint64)"(
-      conditionID?: null,
+      conditionId?: null,
       newTimestamp?: null
     ): ConditionShiftedEventFilter;
     ConditionShifted(
-      conditionID?: null,
+      conditionId?: null,
       newTimestamp?: null
     ): ConditionShiftedEventFilter;
 
-    "LPChanged(address)"(newLP?: string | null): LPChangedEventFilter;
-    LPChanged(newLP?: string | null): LPChangedEventFilter;
+    "ConditionStopped(uint256,bool)"(
+      conditionId?: BigNumberish | null,
+      flag?: null
+    ): ConditionStoppedEventFilter;
+    ConditionStopped(
+      conditionId?: BigNumberish | null,
+      flag?: null
+    ): ConditionStoppedEventFilter;
+
+    "LpChanged(address)"(newLp?: string | null): LpChangedEventFilter;
+    LpChanged(newLp?: string | null): LpChangedEventFilter;
 
     "MaintainerUpdated(address,bool)"(
       maintainer?: string | null,
@@ -1388,6 +1408,11 @@ export interface Core extends BaseContract {
       maintainer?: string | null,
       active?: null
     ): MaintainerUpdatedEventFilter;
+
+    "MaxBanksRatioChanged(uint64)"(
+      newRatio?: null
+    ): MaxBanksRatioChangedEventFilter;
+    MaxBanksRatioChanged(newRatio?: null): MaxBanksRatioChangedEventFilter;
 
     "OracleAdded(address)"(newOracle?: string | null): OracleAddedEventFilter;
     OracleAdded(newOracle?: string | null): OracleAddedEventFilter;
@@ -1405,64 +1430,46 @@ export interface Core extends BaseContract {
       previousOwner?: string | null,
       newOwner?: string | null
     ): OwnershipTransferredEventFilter;
-
-    "allConditionsStoped(bool)"(flag?: null): allConditionsStopedEventFilter;
-    allConditionsStoped(flag?: null): allConditionsStopedEventFilter;
-
-    "conditionStoped(uint256,bool)"(
-      conditionID?: BigNumberish | null,
-      flag?: null
-    ): conditionStopedEventFilter;
-    conditionStoped(
-      conditionID?: BigNumberish | null,
-      flag?: null
-    ): conditionStopedEventFilter;
   };
 
   estimateGas: {
+    LP(overrides?: CallOverrides): Promise<BigNumber>;
+
     addMaintainer(
       maintainer: string,
       active: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    addMargin(
-      odds: BigNumberish,
-      marginality: BigNumberish,
-      decimals: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    allConditionStopped(overrides?: CallOverrides): Promise<BigNumber>;
+    allConditionsStopped(overrides?: CallOverrides): Promise<BigNumber>;
 
     bets(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     calculateOdds(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       amount: BigNumberish,
-      outcomeWin: BigNumberish,
+      outcome: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    cancel(
-      oracleConditionID: BigNumberish,
+    cancelByMaintainer(
+      conditionId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    cancelByMaintainer(
-      conditionID: BigNumberish,
+    cancelByOracle(
+      oracleConditionId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     ceil(
       a: BigNumberish,
       m: BigNumberish,
-      decimals: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     changeMaxBanksRatio(
-      newRatio_: BigNumberish,
+      newRatio: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1472,16 +1479,14 @@ export interface Core extends BaseContract {
     ): Promise<BigNumber>;
 
     createCondition(
-      oracleCondID: BigNumberish,
-      scopeID: BigNumberish,
+      oracleCondId: BigNumberish,
+      scopeId: BigNumberish,
       odds: [BigNumberish, BigNumberish],
       outcomes: [BigNumberish, BigNumberish],
       timestamp: BigNumberish,
       ipfsHash: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
-
-    decimals(overrides?: CallOverrides): Promise<BigNumber>;
 
     defaultMargin(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1493,69 +1498,73 @@ export interface Core extends BaseContract {
     ): Promise<BigNumber>;
 
     getCondition(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getConditionFunds(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getConditionReinforcement(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getLockedPayout(overrides?: CallOverrides): Promise<BigNumber>;
 
     getMargin(
-      outcomeId_: BigNumberish,
+      outcomeId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getOddsFromBanks(
-      fund1Bank_: BigNumberish,
-      fund2Bank_: BigNumberish,
-      amount_: BigNumberish,
-      outcomeIndex_: BigNumberish,
-      marginality_: BigNumberish,
-      decimals_: BigNumberish,
+      fund1Bank: BigNumberish,
+      fund2Bank: BigNumberish,
+      amount: BigNumberish,
+      outcomeIndex: BigNumberish,
+      margin: BigNumberish,
+      multiplier: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getReinforcement(
-      outcomeId_: BigNumberish,
+      outcomeId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     initialize(
-      reinforcement_: BigNumberish,
-      oracle_: string,
-      margin_: BigNumberish,
+      reinforcement: BigNumberish,
+      oracle: string,
+      margin: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    isOracle(
-      oracleWallet: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    isOracle(oracle: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     isOutComeCorrect(
-      conditionID: BigNumberish,
-      outcomeWin: BigNumberish,
+      conditionId: BigNumberish,
+      outcome: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     lastConditionId(overrides?: CallOverrides): Promise<BigNumber>;
 
-    lpAddress(overrides?: CallOverrides): Promise<BigNumber>;
-
     maintainers(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    marginAdjustedOdds(
+      odds: BigNumberish,
+      marginality: BigNumberish,
+      multiplier: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     maxBanksRatio(overrides?: CallOverrides): Promise<BigNumber>;
 
-    oracleConditionIDs(
+    multiplier(overrides?: CallOverrides): Promise<BigNumber>;
+
+    oracleConditionIds(
       arg0: string,
       arg1: BigNumberish,
       overrides?: CallOverrides
@@ -1566,17 +1575,16 @@ export interface Core extends BaseContract {
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     putBet(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       tokenId: BigNumberish,
       amount: BigNumberish,
-      outcomeWin: BigNumberish,
+      outcome: BigNumberish,
       minOdds: BigNumberish,
-      affiliate: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     renounceOracle(
-      oracle_: string,
+      oracle: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1585,28 +1593,28 @@ export interface Core extends BaseContract {
     ): Promise<BigNumber>;
 
     resolveCondition(
-      oracleCondID: BigNumberish,
+      oracleCondId: BigNumberish,
       outcomeWin: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     resolvePayout(
-      tokenID: BigNumberish,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setLP(
-      lpAddress_: string,
+    setLp(
+      lp: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     setOracle(
-      oracle_: string,
+      oracle: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     shift(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       newTimestamp: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -1619,7 +1627,7 @@ export interface Core extends BaseContract {
     ): Promise<BigNumber>;
 
     stopCondition(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       flag: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -1632,36 +1640,31 @@ export interface Core extends BaseContract {
     ): Promise<BigNumber>;
 
     updateMargins(
-      data_: BigNumberish[],
+      data: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     updateReinforcements(
-      data_: BigNumberish[],
+      data: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     viewPayout(
-      tokenID_: BigNumberish,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    LP(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     addMaintainer(
       maintainer: string,
       active: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    addMargin(
-      odds: BigNumberish,
-      marginality: BigNumberish,
-      decimals: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    allConditionStopped(
+    allConditionsStopped(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1671,31 +1674,30 @@ export interface Core extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     calculateOdds(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       amount: BigNumberish,
-      outcomeWin: BigNumberish,
+      outcome: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    cancel(
-      oracleConditionID: BigNumberish,
+    cancelByMaintainer(
+      conditionId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    cancelByMaintainer(
-      conditionID: BigNumberish,
+    cancelByOracle(
+      oracleConditionId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     ceil(
       a: BigNumberish,
       m: BigNumberish,
-      decimals: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     changeMaxBanksRatio(
-      newRatio_: BigNumberish,
+      newRatio: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1705,16 +1707,14 @@ export interface Core extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     createCondition(
-      oracleCondID: BigNumberish,
-      scopeID: BigNumberish,
+      oracleCondId: BigNumberish,
+      scopeId: BigNumberish,
       odds: [BigNumberish, BigNumberish],
       outcomes: [BigNumberish, BigNumberish],
       timestamp: BigNumberish,
       ipfsHash: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
-
-    decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     defaultMargin(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1728,72 +1728,79 @@ export interface Core extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getCondition(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getConditionFunds(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getConditionReinforcement(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getLockedPayout(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getMargin(
-      outcomeId_: BigNumberish,
+      outcomeId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getOddsFromBanks(
-      fund1Bank_: BigNumberish,
-      fund2Bank_: BigNumberish,
-      amount_: BigNumberish,
-      outcomeIndex_: BigNumberish,
-      marginality_: BigNumberish,
-      decimals_: BigNumberish,
+      fund1Bank: BigNumberish,
+      fund2Bank: BigNumberish,
+      amount: BigNumberish,
+      outcomeIndex: BigNumberish,
+      margin: BigNumberish,
+      multiplier: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getReinforcement(
-      outcomeId_: BigNumberish,
+      outcomeId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     initialize(
-      reinforcement_: BigNumberish,
-      oracle_: string,
-      margin_: BigNumberish,
+      reinforcement: BigNumberish,
+      oracle: string,
+      margin: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     isOracle(
-      oracleWallet: string,
+      oracle: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     isOutComeCorrect(
-      conditionID: BigNumberish,
-      outcomeWin: BigNumberish,
+      conditionId: BigNumberish,
+      outcome: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     lastConditionId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    lpAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     maintainers(
       arg0: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    marginAdjustedOdds(
+      odds: BigNumberish,
+      marginality: BigNumberish,
+      multiplier: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     maxBanksRatio(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    oracleConditionIDs(
+    multiplier(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    oracleConditionIds(
       arg0: string,
       arg1: BigNumberish,
       overrides?: CallOverrides
@@ -1807,17 +1814,16 @@ export interface Core extends BaseContract {
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     putBet(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       tokenId: BigNumberish,
       amount: BigNumberish,
-      outcomeWin: BigNumberish,
+      outcome: BigNumberish,
       minOdds: BigNumberish,
-      affiliate: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     renounceOracle(
-      oracle_: string,
+      oracle: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1826,28 +1832,28 @@ export interface Core extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     resolveCondition(
-      oracleCondID: BigNumberish,
+      oracleCondId: BigNumberish,
       outcomeWin: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     resolvePayout(
-      tokenID: BigNumberish,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setLP(
-      lpAddress_: string,
+    setLp(
+      lp: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     setOracle(
-      oracle_: string,
+      oracle: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     shift(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       newTimestamp: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -1863,7 +1869,7 @@ export interface Core extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     stopCondition(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       flag: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -1876,17 +1882,17 @@ export interface Core extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     updateMargins(
-      data_: BigNumberish[],
+      data: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     updateReinforcements(
-      data_: BigNumberish[],
+      data: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     viewPayout(
-      tokenID_: BigNumberish,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };

@@ -20,71 +20,63 @@ import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 export interface LPInterface extends utils.Interface {
   contractName: "LP";
   functions: {
-    "addLiquidity(uint256)": FunctionFragment;
-    "addReserve(uint128,uint128)": FunctionFragment;
-    "affiliates(address)": FunctionFragment;
-    "allowance(address,address)": FunctionFragment;
+    "addLiquidity(uint128)": FunctionFragment;
+    "addReserve(uint128,uint128,uint48)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "azuroBet()": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
-    "bet(uint256,uint128,uint64,uint64,uint64,address)": FunctionFragment;
-    "bettingLiquidity()": FunctionFragment;
+    "bet(uint256,uint128,uint64,uint64,uint64)": FunctionFragment;
     "changeAzuroBet(address)": FunctionFragment;
     "changeCore(address)": FunctionFragment;
-    "changeDAOReward(uint128)": FunctionFragment;
-    "changeFrontReward(uint128)": FunctionFragment;
+    "changeDaoReward(uint128)": FunctionFragment;
+    "changeMinDepo(uint128)": FunctionFragment;
     "changeOracleReward(uint128)": FunctionFragment;
-    "changePeriod(uint64)": FunctionFragment;
-    "claimDAOReward()": FunctionFragment;
-    "claimReward()": FunctionFragment;
+    "changeWithdrawTimeout(uint64)": FunctionFragment;
+    "claimDaoReward()": FunctionFragment;
     "core()": FunctionFragment;
     "daoFee()": FunctionFragment;
-    "decimals()": FunctionFragment;
-    "decreaseAllowance(address,uint256)": FunctionFragment;
-    "freezings(address)": FunctionFragment;
-    "frontFee()": FunctionFragment;
-    "frozen()": FunctionFragment;
-    "getFeeDecimals()": FunctionFragment;
-    "getLiquidityRequests(address)": FunctionFragment;
+    "getApproved(uint256)": FunctionFragment;
+    "getFeeMultiplier()": FunctionFragment;
+    "getLeaf()": FunctionFragment;
+    "getLeavesAmount(uint48,uint48,uint48,uint48,uint48)": FunctionFragment;
     "getOracleFee()": FunctionFragment;
-    "getPeriodsDates()": FunctionFragment;
-    "getPossibilityOfReinforcement(uint256)": FunctionFragment;
+    "getParent(uint48)": FunctionFragment;
+    "getPossibilityOfReinforcement(uint128)": FunctionFragment;
     "getReserve()": FunctionFragment;
-    "increaseAllowance(address,uint256)": FunctionFragment;
-    "initStartDate()": FunctionFragment;
-    "initialize(address,address,uint64)": FunctionFragment;
-    "liquidityRequest(uint256)": FunctionFragment;
+    "initialize(address,address)": FunctionFragment;
+    "isApprovedForAll(address,address)": FunctionFragment;
     "lockReserve(uint128)": FunctionFragment;
     "lockedLiquidity()": FunctionFragment;
+    "minDepo()": FunctionFragment;
     "multiplier()": FunctionFragment;
     "name()": FunctionFragment;
+    "nextNode()": FunctionFragment;
+    "nodeWithdrawView(uint48)": FunctionFragment;
     "oracleFee()": FunctionFragment;
     "owner()": FunctionFragment;
-    "pendingReward(address)": FunctionFragment;
-    "periodLen()": FunctionFragment;
-    "phase2end()": FunctionFragment;
+    "ownerOf(uint256)": FunctionFragment;
     "reinforcementAbility()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
-    "requests(uint256)": FunctionFragment;
-    "savedPeriods()": FunctionFragment;
-    "sendOracleReward(address,uint256)": FunctionFragment;
+    "safeTransferFrom(address,address,uint256)": FunctionFragment;
+    "sendOracleReward(address,uint128)": FunctionFragment;
+    "setApprovalForAll(address,bool)": FunctionFragment;
+    "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "token()": FunctionFragment;
-    "totalBetsAmount()": FunctionFragment;
-    "totalDAORewards()": FunctionFragment;
-    "totalFrontRewards()": FunctionFragment;
-    "totalReserve()": FunctionFragment;
+    "tokenByIndex(uint256)": FunctionFragment;
+    "tokenOfOwnerByIndex(address,uint256)": FunctionFragment;
+    "tokenURI(uint256)": FunctionFragment;
+    "totalDaoRewards()": FunctionFragment;
     "totalSupply()": FunctionFragment;
-    "transfer(address,uint256)": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "unfreezeLiquidity()": FunctionFragment;
-    "updateDateRatio()": FunctionFragment;
+    "treeNode(uint48)": FunctionFragment;
+    "updateId()": FunctionFragment;
     "viewPayout(uint256)": FunctionFragment;
-    "withdrawLiquidity()": FunctionFragment;
+    "withdrawLiquidity(uint48,uint40)": FunctionFragment;
     "withdrawPayout(uint256)": FunctionFragment;
-    "withdrawRatio()": FunctionFragment;
-    "workingReserve()": FunctionFragment;
+    "withdrawTimeout()": FunctionFragment;
+    "withdrawals(uint48)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -93,12 +85,7 @@ export interface LPInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "addReserve",
-    values: [BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(functionFragment: "affiliates", values: [string]): string;
-  encodeFunctionData(
-    functionFragment: "allowance",
-    values: [string, string]
+    values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "approve",
@@ -113,13 +100,8 @@ export interface LPInterface extends utils.Interface {
       BigNumberish,
       BigNumberish,
       BigNumberish,
-      BigNumberish,
-      string
+      BigNumberish
     ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "bettingLiquidity",
-    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "changeAzuroBet",
@@ -127,11 +109,11 @@ export interface LPInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "changeCore", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "changeDAOReward",
+    functionFragment: "changeDaoReward",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "changeFrontReward",
+    functionFragment: "changeMinDepo",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -139,42 +121,41 @@ export interface LPInterface extends utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "changePeriod",
+    functionFragment: "changeWithdrawTimeout",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "claimDAOReward",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "claimReward",
+    functionFragment: "claimDaoReward",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "core", values?: undefined): string;
   encodeFunctionData(functionFragment: "daoFee", values?: undefined): string;
-  encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "decreaseAllowance",
-    values: [string, BigNumberish]
+    functionFragment: "getApproved",
+    values: [BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "freezings", values: [string]): string;
-  encodeFunctionData(functionFragment: "frontFee", values?: undefined): string;
-  encodeFunctionData(functionFragment: "frozen", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "getFeeDecimals",
+    functionFragment: "getFeeMultiplier",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "getLeaf", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "getLiquidityRequests",
-    values: [string]
+    functionFragment: "getLeavesAmount",
+    values: [
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "getOracleFee",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "getPeriodsDates",
-    values?: undefined
+    functionFragment: "getParent",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getPossibilityOfReinforcement",
@@ -185,20 +166,12 @@ export interface LPInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "increaseAllowance",
-    values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "initStartDate",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "initialize",
-    values: [string, string, BigNumberish]
+    values: [string, string]
   ): string;
   encodeFunctionData(
-    functionFragment: "liquidityRequest",
-    values: [BigNumberish]
+    functionFragment: "isApprovedForAll",
+    values: [string, string]
   ): string;
   encodeFunctionData(
     functionFragment: "lockReserve",
@@ -208,19 +181,23 @@ export interface LPInterface extends utils.Interface {
     functionFragment: "lockedLiquidity",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "minDepo", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "multiplier",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
+  encodeFunctionData(functionFragment: "nextNode", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "nodeWithdrawView",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "oracleFee", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "pendingReward",
-    values: [string]
+    functionFragment: "ownerOf",
+    values: [BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "periodLen", values?: undefined): string;
-  encodeFunctionData(functionFragment: "phase2end", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "reinforcementAbility",
     values?: undefined
@@ -230,42 +207,42 @@ export interface LPInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "requests",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "savedPeriods",
-    values?: undefined
+    functionFragment: "safeTransferFrom",
+    values: [string, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "sendOracleReward",
     values: [string, BigNumberish]
   ): string;
+  encodeFunctionData(
+    functionFragment: "setApprovalForAll",
+    values: [string, boolean]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "supportsInterface",
+    values: [BytesLike]
+  ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(functionFragment: "token", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "totalBetsAmount",
-    values?: undefined
+    functionFragment: "tokenByIndex",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "totalDAORewards",
-    values?: undefined
+    functionFragment: "tokenOfOwnerByIndex",
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "totalFrontRewards",
-    values?: undefined
+    functionFragment: "tokenURI",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "totalReserve",
+    functionFragment: "totalDaoRewards",
     values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "totalSupply",
     values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "transfer",
-    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "transferFrom",
@@ -276,32 +253,29 @@ export interface LPInterface extends utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "unfreezeLiquidity",
-    values?: undefined
+    functionFragment: "treeNode",
+    values: [BigNumberish]
   ): string;
-  encodeFunctionData(
-    functionFragment: "updateDateRatio",
-    values?: undefined
-  ): string;
+  encodeFunctionData(functionFragment: "updateId", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "viewPayout",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "withdrawLiquidity",
-    values?: undefined
+    values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "withdrawPayout",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "withdrawRatio",
+    functionFragment: "withdrawTimeout",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "workingReserve",
-    values?: undefined
+    functionFragment: "withdrawals",
+    values: [BigNumberish]
   ): string;
 
   decodeFunctionResult(
@@ -309,27 +283,21 @@ export interface LPInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "addReserve", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "affiliates", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "azuroBet", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "bet", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "bettingLiquidity",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "changeAzuroBet",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "changeCore", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "changeDAOReward",
+    functionFragment: "changeDaoReward",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "changeFrontReward",
+    functionFragment: "changeMinDepo",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -337,59 +305,41 @@ export interface LPInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "changePeriod",
+    functionFragment: "changeWithdrawTimeout",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "claimDAOReward",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "claimReward",
+    functionFragment: "claimDaoReward",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "core", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "daoFee", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "decreaseAllowance",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "freezings", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "frontFee", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "frozen", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getFeeDecimals",
+    functionFragment: "getApproved",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getLiquidityRequests",
+    functionFragment: "getFeeMultiplier",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "getLeaf", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getLeavesAmount",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "getOracleFee",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "getPeriodsDates",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "getParent", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getPossibilityOfReinforcement",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getReserve", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "increaseAllowance",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "initStartDate",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "liquidityRequest",
+    functionFragment: "isApprovedForAll",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -400,16 +350,17 @@ export interface LPInterface extends utils.Interface {
     functionFragment: "lockedLiquidity",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "minDepo", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "multiplier", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "oracleFee", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "nextNode", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "pendingReward",
+    functionFragment: "nodeWithdrawView",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "periodLen", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "phase2end", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "oracleFee", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "reinforcementAbility",
     data: BytesLike
@@ -418,38 +369,41 @@ export interface LPInterface extends utils.Interface {
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "requests", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "savedPeriods",
+    functionFragment: "safeTransferFrom",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "sendOracleReward",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "setApprovalForAll",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "supportsInterface",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "token", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "totalBetsAmount",
+    functionFragment: "tokenByIndex",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "totalDAORewards",
+    functionFragment: "tokenOfOwnerByIndex",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "totalFrontRewards",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "totalReserve",
+    functionFragment: "totalDaoRewards",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "transfer", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "transferFrom",
     data: BytesLike
@@ -458,14 +412,8 @@ export interface LPInterface extends utils.Interface {
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "unfreezeLiquidity",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "updateDateRatio",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "treeNode", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "updateId", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "viewPayout", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "withdrawLiquidity",
@@ -476,51 +424,69 @@ export interface LPInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "withdrawRatio",
+    functionFragment: "withdrawTimeout",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "workingReserve",
+    functionFragment: "withdrawals",
     data: BytesLike
   ): Result;
 
   events: {
     "Approval(address,address,uint256)": EventFragment;
+    "ApprovalForAll(address,address,bool)": EventFragment;
+    "AzuroBetChanged(address)": EventFragment;
     "BetterWin(address,uint256,uint256)": EventFragment;
-    "DAORewardChanged(uint128)": EventFragment;
-    "FrontRewardChanged(uint128)": EventFragment;
-    "LiquidityAdded(address,uint256)": EventFragment;
+    "DaoRewardChanged(uint128)": EventFragment;
+    "LiquidityAdded(address,uint256,uint48)": EventFragment;
     "LiquidityRemoved(address,uint256)": EventFragment;
     "LiquidityRequested(address,uint256)": EventFragment;
+    "MinDepoChanged(uint128)": EventFragment;
     "NewBet(address,uint256,uint256,uint64,uint128,uint256,uint128,uint128)": EventFragment;
     "OracleRewardChanged(uint128)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "PeriodChanged(uint64)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
-    "azuroBetChanged(address)": EventFragment;
+    "WithdrawTimeoutChanged(uint64)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "AzuroBetChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BetterWin"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "DAORewardChanged"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "FrontRewardChanged"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "DaoRewardChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LiquidityAdded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LiquidityRemoved"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LiquidityRequested"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "MinDepoChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NewBet"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OracleRewardChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PeriodChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "azuroBetChanged"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "WithdrawTimeoutChanged"): EventFragment;
 }
 
 export type ApprovalEvent = TypedEvent<
   [string, string, BigNumber],
-  { owner: string; spender: string; value: BigNumber }
+  { owner: string; approved: string; tokenId: BigNumber }
 >;
 
 export type ApprovalEventFilter = TypedEventFilter<ApprovalEvent>;
+
+export type ApprovalForAllEvent = TypedEvent<
+  [string, string, boolean],
+  { owner: string; operator: string; approved: boolean }
+>;
+
+export type ApprovalForAllEventFilter = TypedEventFilter<ApprovalForAllEvent>;
+
+export type AzuroBetChangedEvent = TypedEvent<
+  [string],
+  { newAzuroBet: string }
+>;
+
+export type AzuroBetChangedEventFilter = TypedEventFilter<AzuroBetChangedEvent>;
 
 export type BetterWinEvent = TypedEvent<
   [string, BigNumber, BigNumber],
@@ -529,25 +495,17 @@ export type BetterWinEvent = TypedEvent<
 
 export type BetterWinEventFilter = TypedEventFilter<BetterWinEvent>;
 
-export type DAORewardChangedEvent = TypedEvent<
+export type DaoRewardChangedEvent = TypedEvent<
   [BigNumber],
-  { newDAOFee: BigNumber }
+  { newDaoFee: BigNumber }
 >;
 
-export type DAORewardChangedEventFilter =
-  TypedEventFilter<DAORewardChangedEvent>;
-
-export type FrontRewardChangedEvent = TypedEvent<
-  [BigNumber],
-  { newFrontFee: BigNumber }
->;
-
-export type FrontRewardChangedEventFilter =
-  TypedEventFilter<FrontRewardChangedEvent>;
+export type DaoRewardChangedEventFilter =
+  TypedEventFilter<DaoRewardChangedEvent>;
 
 export type LiquidityAddedEvent = TypedEvent<
-  [string, BigNumber],
-  { account: string; amount: BigNumber }
+  [string, BigNumber, number],
+  { account: string; amount: BigNumber; leaf: number }
 >;
 
 export type LiquidityAddedEventFilter = TypedEventFilter<LiquidityAddedEvent>;
@@ -562,11 +520,18 @@ export type LiquidityRemovedEventFilter =
 
 export type LiquidityRequestedEvent = TypedEvent<
   [string, BigNumber],
-  { requestWallet: string; requestedValueLP: BigNumber }
+  { requestWallet: string; requestedValueLp: BigNumber }
 >;
 
 export type LiquidityRequestedEventFilter =
   TypedEventFilter<LiquidityRequestedEvent>;
+
+export type MinDepoChangedEvent = TypedEvent<
+  [BigNumber],
+  { newMinDepo: BigNumber }
+>;
+
+export type MinDepoChangedEventFilter = TypedEventFilter<MinDepoChangedEvent>;
 
 export type NewBetEvent = TypedEvent<
   [
@@ -581,7 +546,7 @@ export type NewBetEvent = TypedEvent<
   ],
   {
     owner: string;
-    betID: BigNumber;
+    betId: BigNumber;
     conditionId: BigNumber;
     outcomeId: BigNumber;
     amount: BigNumber;
@@ -618,17 +583,18 @@ export type PeriodChangedEventFilter = TypedEventFilter<PeriodChangedEvent>;
 
 export type TransferEvent = TypedEvent<
   [string, string, BigNumber],
-  { from: string; to: string; value: BigNumber }
+  { from: string; to: string; tokenId: BigNumber }
 >;
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
 
-export type azuroBetChangedEvent = TypedEvent<
-  [string],
-  { newAzuroBet: string }
+export type WithdrawTimeoutChangedEvent = TypedEvent<
+  [BigNumber],
+  { newWithdrawTimeout: BigNumber }
 >;
 
-export type azuroBetChangedEventFilter = TypedEventFilter<azuroBetChangedEvent>;
+export type WithdrawTimeoutChangedEventFilter =
+  TypedEventFilter<WithdrawTimeoutChangedEvent>;
 
 export interface LP extends BaseContract {
   contractName: "LP";
@@ -666,65 +632,46 @@ export interface LP extends BaseContract {
     addReserve(
       initReserve: BigNumberish,
       profitReserve: BigNumberish,
+      leaf: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    affiliates(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<
-      [BigNumber, BigNumber, BigNumber] & {
-        claimed: BigNumber;
-        amount: BigNumber;
-        totalFrontRewards: BigNumber;
-      }
-    >;
-
-    allowance(
-      owner: string,
-      spender: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
     approve(
-      spender: string,
-      amount: BigNumberish,
+      to: string,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     azuroBet(overrides?: CallOverrides): Promise<[string]>;
 
-    balanceOf(account: string, overrides?: CallOverrides): Promise<[BigNumber]>;
+    balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     bet(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       amount: BigNumberish,
-      outcomeID: BigNumberish,
+      outcomeId: BigNumberish,
       deadline: BigNumberish,
       minOdds: BigNumberish,
-      affiliate_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    bettingLiquidity(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     changeAzuroBet(
-      addr: string,
+      newAzuroBet: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     changeCore(
-      addr: string,
+      newCore: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    changeDAOReward(
-      newDAOFee: BigNumberish,
+    changeDaoReward(
+      newDaoFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    changeFrontReward(
-      newFrontFee: BigNumberish,
+    changeMinDepo(
+      newMinDepo: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -733,16 +680,12 @@ export interface LP extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    changePeriod(
-      newPeriod: BigNumberish,
+    changeWithdrawTimeout(
+      newWithdrawTimeout: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    claimDAOReward(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    claimReward(
+    claimDaoReward(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -750,50 +693,34 @@ export interface LP extends BaseContract {
 
     daoFee(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    decimals(overrides?: CallOverrides): Promise<[number]>;
-
-    decreaseAllowance(
-      spender: string,
-      subtractedValue: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    freezings(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    frontFee(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    frozen(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    getFeeDecimals(
+    getApproved(
+      tokenId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[BigNumber] & { feeDecimals: BigNumber }>;
+    ): Promise<[string]>;
 
-    getLiquidityRequests(
-      wallet: string,
+    getFeeMultiplier(
       overrides?: CallOverrides
-    ): Promise<
-      [
-        [BigNumber, BigNumber, BigNumber],
-        [BigNumber, BigNumber, BigNumber],
-        BigNumber
-      ] & {
-        beginDates: [BigNumber, BigNumber, BigNumber];
-        personal: [BigNumber, BigNumber, BigNumber];
-        total: BigNumber;
-      }
-    >;
+    ): Promise<[BigNumber] & { feeMultiplier: BigNumber }>;
+
+    getLeaf(overrides?: CallOverrides): Promise<[number] & { leaf: number }>;
+
+    getLeavesAmount(
+      node: BigNumberish,
+      begin: BigNumberish,
+      end: BigNumberish,
+      l: BigNumberish,
+      r: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { amount: BigNumber }>;
 
     getOracleFee(
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { fee: BigNumber }>;
 
-    getPeriodsDates(
+    getParent(
+      fromNumber: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<
-      [[BigNumber, BigNumber, BigNumber]] & {
-        beginDates: [BigNumber, BigNumber, BigNumber];
-      }
-    >;
+    ): Promise<[number] & { parentNumber: number }>;
 
     getPossibilityOfReinforcement(
       reinforcementAmount: BigNumberish,
@@ -804,25 +731,17 @@ export interface LP extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { reserve: BigNumber }>;
 
-    increaseAllowance(
-      spender: string,
-      addedValue: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    initStartDate(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     initialize(
       token_: string,
       azuroBetAddress: string,
-      _periodLen: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    liquidityRequest(
-      valueLP: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+    isApprovedForAll(
+      owner: string,
+      operator: string,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
 
     lockReserve(
       amount: BigNumberish,
@@ -831,22 +750,27 @@ export interface LP extends BaseContract {
 
     lockedLiquidity(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    minDepo(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     multiplier(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
+
+    nextNode(overrides?: CallOverrides): Promise<[number]>;
+
+    nodeWithdrawView(
+      leaf: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { withdrawAmount: BigNumber }>;
 
     oracleFee(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
-    pendingReward(
-      affiliate_: string,
+    ownerOf(
+      tokenId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[BigNumber] & { reward: BigNumber }>;
-
-    periodLen(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    phase2end(overrides?: CallOverrides): Promise<[BigNumber]>;
+    ): Promise<[string]>;
 
     reinforcementAbility(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -854,43 +778,66 @@ export interface LP extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    requests(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { totalValue: BigNumber }>;
-
-    savedPeriods(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    sendOracleReward(
-      _oracle: string,
-      _amount: BigNumberish,
+    "safeTransferFrom(address,address,uint256)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    "safeTransferFrom(address,address,uint256,bytes)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      _data: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    sendOracleReward(
+      oracle: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setApprovalForAll(
+      operator: string,
+      approved: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    supportsInterface(
+      interfaceId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
 
     symbol(overrides?: CallOverrides): Promise<[string]>;
 
     token(overrides?: CallOverrides): Promise<[string]>;
 
-    totalBetsAmount(overrides?: CallOverrides): Promise<[BigNumber]>;
+    tokenByIndex(
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
-    totalDAORewards(overrides?: CallOverrides): Promise<[BigNumber]>;
+    tokenOfOwnerByIndex(
+      owner: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
-    totalFrontRewards(overrides?: CallOverrides): Promise<[BigNumber]>;
+    tokenURI(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
-    totalReserve(overrides?: CallOverrides): Promise<[BigNumber]>;
+    totalDaoRewards(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    transfer(
-      recipient: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     transferFrom(
-      sender: string,
-      recipient: string,
-      amount: BigNumberish,
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -899,11 +846,14 @@ export interface LP extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    unfreezeLiquidity(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+    treeNode(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber] & { updateId: BigNumber; amount: BigNumber }
+    >;
 
-    updateDateRatio(overrides?: CallOverrides): Promise<[BigNumber]>;
+    updateId(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     viewPayout(
       tokenId: BigNumberish,
@@ -911,6 +861,8 @@ export interface LP extends BaseContract {
     ): Promise<[boolean, BigNumber]>;
 
     withdrawLiquidity(
+      depNum: BigNumberish,
+      percent: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -919,11 +871,12 @@ export interface LP extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    withdrawRatio(overrides?: CallOverrides): Promise<[BigNumber]>;
+    withdrawTimeout(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    workingReserve(
+    withdrawals(
+      arg0: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[BigNumber] & { available: BigNumber }>;
+    ): Promise<[BigNumber]>;
   };
 
   addLiquidity(
@@ -934,65 +887,46 @@ export interface LP extends BaseContract {
   addReserve(
     initReserve: BigNumberish,
     profitReserve: BigNumberish,
+    leaf: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  affiliates(
-    arg0: string,
-    overrides?: CallOverrides
-  ): Promise<
-    [BigNumber, BigNumber, BigNumber] & {
-      claimed: BigNumber;
-      amount: BigNumber;
-      totalFrontRewards: BigNumber;
-    }
-  >;
-
-  allowance(
-    owner: string,
-    spender: string,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
   approve(
-    spender: string,
-    amount: BigNumberish,
+    to: string,
+    tokenId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   azuroBet(overrides?: CallOverrides): Promise<string>;
 
-  balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
+  balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   bet(
-    conditionID: BigNumberish,
+    conditionId: BigNumberish,
     amount: BigNumberish,
-    outcomeID: BigNumberish,
+    outcomeId: BigNumberish,
     deadline: BigNumberish,
     minOdds: BigNumberish,
-    affiliate_: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  bettingLiquidity(overrides?: CallOverrides): Promise<BigNumber>;
-
   changeAzuroBet(
-    addr: string,
+    newAzuroBet: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   changeCore(
-    addr: string,
+    newCore: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  changeDAOReward(
-    newDAOFee: BigNumberish,
+  changeDaoReward(
+    newDaoFee: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  changeFrontReward(
-    newFrontFee: BigNumberish,
+  changeMinDepo(
+    newMinDepo: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1001,16 +935,12 @@ export interface LP extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  changePeriod(
-    newPeriod: BigNumberish,
+  changeWithdrawTimeout(
+    newWithdrawTimeout: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  claimDAOReward(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  claimReward(
+  claimDaoReward(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1018,42 +948,30 @@ export interface LP extends BaseContract {
 
   daoFee(overrides?: CallOverrides): Promise<BigNumber>;
 
-  decimals(overrides?: CallOverrides): Promise<number>;
-
-  decreaseAllowance(
-    spender: string,
-    subtractedValue: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  freezings(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-  frontFee(overrides?: CallOverrides): Promise<BigNumber>;
-
-  frozen(overrides?: CallOverrides): Promise<BigNumber>;
-
-  getFeeDecimals(overrides?: CallOverrides): Promise<BigNumber>;
-
-  getLiquidityRequests(
-    wallet: string,
+  getApproved(
+    tokenId: BigNumberish,
     overrides?: CallOverrides
-  ): Promise<
-    [
-      [BigNumber, BigNumber, BigNumber],
-      [BigNumber, BigNumber, BigNumber],
-      BigNumber
-    ] & {
-      beginDates: [BigNumber, BigNumber, BigNumber];
-      personal: [BigNumber, BigNumber, BigNumber];
-      total: BigNumber;
-    }
-  >;
+  ): Promise<string>;
+
+  getFeeMultiplier(overrides?: CallOverrides): Promise<BigNumber>;
+
+  getLeaf(overrides?: CallOverrides): Promise<number>;
+
+  getLeavesAmount(
+    node: BigNumberish,
+    begin: BigNumberish,
+    end: BigNumberish,
+    l: BigNumberish,
+    r: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   getOracleFee(overrides?: CallOverrides): Promise<BigNumber>;
 
-  getPeriodsDates(
+  getParent(
+    fromNumber: BigNumberish,
     overrides?: CallOverrides
-  ): Promise<[BigNumber, BigNumber, BigNumber]>;
+  ): Promise<number>;
 
   getPossibilityOfReinforcement(
     reinforcementAmount: BigNumberish,
@@ -1062,25 +980,17 @@ export interface LP extends BaseContract {
 
   getReserve(overrides?: CallOverrides): Promise<BigNumber>;
 
-  increaseAllowance(
-    spender: string,
-    addedValue: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  initStartDate(overrides?: CallOverrides): Promise<BigNumber>;
-
   initialize(
     token_: string,
     azuroBetAddress: string,
-    _periodLen: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  liquidityRequest(
-    valueLP: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  isApprovedForAll(
+    owner: string,
+    operator: string,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   lockReserve(
     amount: BigNumberish,
@@ -1089,22 +999,24 @@ export interface LP extends BaseContract {
 
   lockedLiquidity(overrides?: CallOverrides): Promise<BigNumber>;
 
+  minDepo(overrides?: CallOverrides): Promise<BigNumber>;
+
   multiplier(overrides?: CallOverrides): Promise<BigNumber>;
 
   name(overrides?: CallOverrides): Promise<string>;
+
+  nextNode(overrides?: CallOverrides): Promise<number>;
+
+  nodeWithdrawView(
+    leaf: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   oracleFee(overrides?: CallOverrides): Promise<BigNumber>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
-  pendingReward(
-    affiliate_: string,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  periodLen(overrides?: CallOverrides): Promise<BigNumber>;
-
-  phase2end(overrides?: CallOverrides): Promise<BigNumber>;
+  ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   reinforcementAbility(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1112,40 +1024,63 @@ export interface LP extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  requests(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-  savedPeriods(overrides?: CallOverrides): Promise<BigNumber>;
-
-  sendOracleReward(
-    _oracle: string,
-    _amount: BigNumberish,
+  "safeTransferFrom(address,address,uint256)"(
+    from: string,
+    to: string,
+    tokenId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  "safeTransferFrom(address,address,uint256,bytes)"(
+    from: string,
+    to: string,
+    tokenId: BigNumberish,
+    _data: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  sendOracleReward(
+    oracle: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setApprovalForAll(
+    operator: string,
+    approved: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  supportsInterface(
+    interfaceId: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   symbol(overrides?: CallOverrides): Promise<string>;
 
   token(overrides?: CallOverrides): Promise<string>;
 
-  totalBetsAmount(overrides?: CallOverrides): Promise<BigNumber>;
+  tokenByIndex(
+    index: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
-  totalDAORewards(overrides?: CallOverrides): Promise<BigNumber>;
+  tokenOfOwnerByIndex(
+    owner: string,
+    index: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
-  totalFrontRewards(overrides?: CallOverrides): Promise<BigNumber>;
+  tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-  totalReserve(overrides?: CallOverrides): Promise<BigNumber>;
+  totalDaoRewards(overrides?: CallOverrides): Promise<BigNumber>;
 
   totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
-  transfer(
-    recipient: string,
-    amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   transferFrom(
-    sender: string,
-    recipient: string,
-    amount: BigNumberish,
+    from: string,
+    to: string,
+    tokenId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1154,11 +1089,14 @@ export interface LP extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  unfreezeLiquidity(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  treeNode(
+    arg0: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, BigNumber] & { updateId: BigNumber; amount: BigNumber }
+  >;
 
-  updateDateRatio(overrides?: CallOverrides): Promise<BigNumber>;
+  updateId(overrides?: CallOverrides): Promise<BigNumber>;
 
   viewPayout(
     tokenId: BigNumberish,
@@ -1166,6 +1104,8 @@ export interface LP extends BaseContract {
   ): Promise<[boolean, BigNumber]>;
 
   withdrawLiquidity(
+    depNum: BigNumberish,
+    percent: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1174,9 +1114,12 @@ export interface LP extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  withdrawRatio(overrides?: CallOverrides): Promise<BigNumber>;
+  withdrawTimeout(overrides?: CallOverrides): Promise<BigNumber>;
 
-  workingReserve(overrides?: CallOverrides): Promise<BigNumber>;
+  withdrawals(
+    arg0: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   callStatic: {
     addLiquidity(
@@ -1187,59 +1130,43 @@ export interface LP extends BaseContract {
     addReserve(
       initReserve: BigNumberish,
       profitReserve: BigNumberish,
+      leaf: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    affiliates(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<
-      [BigNumber, BigNumber, BigNumber] & {
-        claimed: BigNumber;
-        amount: BigNumber;
-        totalFrontRewards: BigNumber;
-      }
-    >;
-
-    allowance(
-      owner: string,
-      spender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     approve(
-      spender: string,
-      amount: BigNumberish,
+      to: string,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<boolean>;
+    ): Promise<void>;
 
     azuroBet(overrides?: CallOverrides): Promise<string>;
 
-    balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
+    balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     bet(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       amount: BigNumberish,
-      outcomeID: BigNumberish,
+      outcomeId: BigNumberish,
       deadline: BigNumberish,
       minOdds: BigNumberish,
-      affiliate_: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    bettingLiquidity(overrides?: CallOverrides): Promise<BigNumber>;
-
-    changeAzuroBet(addr: string, overrides?: CallOverrides): Promise<void>;
-
-    changeCore(addr: string, overrides?: CallOverrides): Promise<void>;
-
-    changeDAOReward(
-      newDAOFee: BigNumberish,
+    changeAzuroBet(
+      newAzuroBet: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    changeFrontReward(
-      newFrontFee: BigNumberish,
+    changeCore(newCore: string, overrides?: CallOverrides): Promise<void>;
+
+    changeDaoReward(
+      newDaoFee: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    changeMinDepo(
+      newMinDepo: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1248,55 +1175,41 @@ export interface LP extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    changePeriod(
-      newPeriod: BigNumberish,
+    changeWithdrawTimeout(
+      newWithdrawTimeout: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    claimDAOReward(overrides?: CallOverrides): Promise<void>;
-
-    claimReward(overrides?: CallOverrides): Promise<void>;
+    claimDaoReward(overrides?: CallOverrides): Promise<void>;
 
     core(overrides?: CallOverrides): Promise<string>;
 
     daoFee(overrides?: CallOverrides): Promise<BigNumber>;
 
-    decimals(overrides?: CallOverrides): Promise<number>;
-
-    decreaseAllowance(
-      spender: string,
-      subtractedValue: BigNumberish,
+    getApproved(
+      tokenId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<boolean>;
+    ): Promise<string>;
 
-    freezings(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+    getFeeMultiplier(overrides?: CallOverrides): Promise<BigNumber>;
 
-    frontFee(overrides?: CallOverrides): Promise<BigNumber>;
+    getLeaf(overrides?: CallOverrides): Promise<number>;
 
-    frozen(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getFeeDecimals(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getLiquidityRequests(
-      wallet: string,
+    getLeavesAmount(
+      node: BigNumberish,
+      begin: BigNumberish,
+      end: BigNumberish,
+      l: BigNumberish,
+      r: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<
-      [
-        [BigNumber, BigNumber, BigNumber],
-        [BigNumber, BigNumber, BigNumber],
-        BigNumber
-      ] & {
-        beginDates: [BigNumber, BigNumber, BigNumber];
-        personal: [BigNumber, BigNumber, BigNumber];
-        total: BigNumber;
-      }
-    >;
+    ): Promise<BigNumber>;
 
     getOracleFee(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getPeriodsDates(
+    getParent(
+      fromNumber: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[BigNumber, BigNumber, BigNumber]>;
+    ): Promise<number>;
 
     getPossibilityOfReinforcement(
       reinforcementAmount: BigNumberish,
@@ -1305,125 +1218,168 @@ export interface LP extends BaseContract {
 
     getReserve(overrides?: CallOverrides): Promise<BigNumber>;
 
-    increaseAllowance(
-      spender: string,
-      addedValue: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    initStartDate(overrides?: CallOverrides): Promise<BigNumber>;
-
     initialize(
       token_: string,
       azuroBetAddress: string,
-      _periodLen: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    liquidityRequest(
-      valueLP: BigNumberish,
+    isApprovedForAll(
+      owner: string,
+      operator: string,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<boolean>;
 
     lockReserve(amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     lockedLiquidity(overrides?: CallOverrides): Promise<BigNumber>;
 
+    minDepo(overrides?: CallOverrides): Promise<BigNumber>;
+
     multiplier(overrides?: CallOverrides): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<string>;
+
+    nextNode(overrides?: CallOverrides): Promise<number>;
+
+    nodeWithdrawView(
+      leaf: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     oracleFee(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
-    pendingReward(
-      affiliate_: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    periodLen(overrides?: CallOverrides): Promise<BigNumber>;
-
-    phase2end(overrides?: CallOverrides): Promise<BigNumber>;
+    ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
     reinforcementAbility(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
-    requests(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    savedPeriods(overrides?: CallOverrides): Promise<BigNumber>;
-
-    sendOracleReward(
-      _oracle: string,
-      _amount: BigNumberish,
+    "safeTransferFrom(address,address,uint256)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    "safeTransferFrom(address,address,uint256,bytes)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      _data: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    sendOracleReward(
+      oracle: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setApprovalForAll(
+      operator: string,
+      approved: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    supportsInterface(
+      interfaceId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     symbol(overrides?: CallOverrides): Promise<string>;
 
     token(overrides?: CallOverrides): Promise<string>;
 
-    totalBetsAmount(overrides?: CallOverrides): Promise<BigNumber>;
+    tokenByIndex(
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    totalDAORewards(overrides?: CallOverrides): Promise<BigNumber>;
+    tokenOfOwnerByIndex(
+      owner: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    totalFrontRewards(overrides?: CallOverrides): Promise<BigNumber>;
+    tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-    totalReserve(overrides?: CallOverrides): Promise<BigNumber>;
+    totalDaoRewards(overrides?: CallOverrides): Promise<BigNumber>;
 
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
-    transfer(
-      recipient: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
     transferFrom(
-      sender: string,
-      recipient: string,
-      amount: BigNumberish,
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<boolean>;
+    ): Promise<void>;
 
     transferOwnership(
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    unfreezeLiquidity(overrides?: CallOverrides): Promise<void>;
+    treeNode(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber] & { updateId: BigNumber; amount: BigNumber }
+    >;
 
-    updateDateRatio(overrides?: CallOverrides): Promise<BigNumber>;
+    updateId(overrides?: CallOverrides): Promise<BigNumber>;
 
     viewPayout(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[boolean, BigNumber]>;
 
-    withdrawLiquidity(overrides?: CallOverrides): Promise<void>;
+    withdrawLiquidity(
+      depNum: BigNumberish,
+      percent: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     withdrawPayout(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    withdrawRatio(overrides?: CallOverrides): Promise<BigNumber>;
+    withdrawTimeout(overrides?: CallOverrides): Promise<BigNumber>;
 
-    workingReserve(overrides?: CallOverrides): Promise<BigNumber>;
+    withdrawals(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
   };
 
   filters: {
     "Approval(address,address,uint256)"(
       owner?: string | null,
-      spender?: string | null,
-      value?: null
+      approved?: string | null,
+      tokenId?: BigNumberish | null
     ): ApprovalEventFilter;
     Approval(
       owner?: string | null,
-      spender?: string | null,
-      value?: null
+      approved?: string | null,
+      tokenId?: BigNumberish | null
     ): ApprovalEventFilter;
+
+    "ApprovalForAll(address,address,bool)"(
+      owner?: string | null,
+      operator?: string | null,
+      approved?: null
+    ): ApprovalForAllEventFilter;
+    ApprovalForAll(
+      owner?: string | null,
+      operator?: string | null,
+      approved?: null
+    ): ApprovalForAllEventFilter;
+
+    "AzuroBetChanged(address)"(newAzuroBet?: null): AzuroBetChangedEventFilter;
+    AzuroBetChanged(newAzuroBet?: null): AzuroBetChangedEventFilter;
 
     "BetterWin(address,uint256,uint256)"(
       better?: string | null,
@@ -1436,21 +1392,18 @@ export interface LP extends BaseContract {
       amount?: null
     ): BetterWinEventFilter;
 
-    "DAORewardChanged(uint128)"(newDAOFee?: null): DAORewardChangedEventFilter;
-    DAORewardChanged(newDAOFee?: null): DAORewardChangedEventFilter;
+    "DaoRewardChanged(uint128)"(newDaoFee?: null): DaoRewardChangedEventFilter;
+    DaoRewardChanged(newDaoFee?: null): DaoRewardChangedEventFilter;
 
-    "FrontRewardChanged(uint128)"(
-      newFrontFee?: null
-    ): FrontRewardChangedEventFilter;
-    FrontRewardChanged(newFrontFee?: null): FrontRewardChangedEventFilter;
-
-    "LiquidityAdded(address,uint256)"(
+    "LiquidityAdded(address,uint256,uint48)"(
       account?: string | null,
-      amount?: null
+      amount?: null,
+      leaf?: null
     ): LiquidityAddedEventFilter;
     LiquidityAdded(
       account?: string | null,
-      amount?: null
+      amount?: null,
+      leaf?: null
     ): LiquidityAddedEventFilter;
 
     "LiquidityRemoved(address,uint256)"(
@@ -1464,16 +1417,19 @@ export interface LP extends BaseContract {
 
     "LiquidityRequested(address,uint256)"(
       requestWallet?: string | null,
-      requestedValueLP?: null
+      requestedValueLp?: null
     ): LiquidityRequestedEventFilter;
     LiquidityRequested(
       requestWallet?: string | null,
-      requestedValueLP?: null
+      requestedValueLp?: null
     ): LiquidityRequestedEventFilter;
+
+    "MinDepoChanged(uint128)"(newMinDepo?: null): MinDepoChangedEventFilter;
+    MinDepoChanged(newMinDepo?: null): MinDepoChangedEventFilter;
 
     "NewBet(address,uint256,uint256,uint64,uint128,uint256,uint128,uint128)"(
       owner?: string | null,
-      betID?: BigNumberish | null,
+      betId?: BigNumberish | null,
       conditionId?: BigNumberish | null,
       outcomeId?: null,
       amount?: null,
@@ -1483,7 +1439,7 @@ export interface LP extends BaseContract {
     ): NewBetEventFilter;
     NewBet(
       owner?: string | null,
-      betID?: BigNumberish | null,
+      betId?: BigNumberish | null,
       conditionId?: BigNumberish | null,
       outcomeId?: null,
       amount?: null,
@@ -1512,16 +1468,20 @@ export interface LP extends BaseContract {
     "Transfer(address,address,uint256)"(
       from?: string | null,
       to?: string | null,
-      value?: null
+      tokenId?: BigNumberish | null
     ): TransferEventFilter;
     Transfer(
       from?: string | null,
       to?: string | null,
-      value?: null
+      tokenId?: BigNumberish | null
     ): TransferEventFilter;
 
-    "azuroBetChanged(address)"(newAzuroBet?: null): azuroBetChangedEventFilter;
-    azuroBetChanged(newAzuroBet?: null): azuroBetChangedEventFilter;
+    "WithdrawTimeoutChanged(uint64)"(
+      newWithdrawTimeout?: null
+    ): WithdrawTimeoutChangedEventFilter;
+    WithdrawTimeoutChanged(
+      newWithdrawTimeout?: null
+    ): WithdrawTimeoutChangedEventFilter;
   };
 
   estimateGas: {
@@ -1533,56 +1493,46 @@ export interface LP extends BaseContract {
     addReserve(
       initReserve: BigNumberish,
       profitReserve: BigNumberish,
+      leaf: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    affiliates(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-    allowance(
-      owner: string,
-      spender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     approve(
-      spender: string,
-      amount: BigNumberish,
+      to: string,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     azuroBet(overrides?: CallOverrides): Promise<BigNumber>;
 
-    balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
+    balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     bet(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       amount: BigNumberish,
-      outcomeID: BigNumberish,
+      outcomeId: BigNumberish,
       deadline: BigNumberish,
       minOdds: BigNumberish,
-      affiliate_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    bettingLiquidity(overrides?: CallOverrides): Promise<BigNumber>;
-
     changeAzuroBet(
-      addr: string,
+      newAzuroBet: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     changeCore(
-      addr: string,
+      newCore: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    changeDAOReward(
-      newDAOFee: BigNumberish,
+    changeDaoReward(
+      newDaoFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    changeFrontReward(
-      newFrontFee: BigNumberish,
+    changeMinDepo(
+      newMinDepo: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1591,16 +1541,12 @@ export interface LP extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    changePeriod(
-      newPeriod: BigNumberish,
+    changeWithdrawTimeout(
+      newWithdrawTimeout: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    claimDAOReward(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    claimReward(
+    claimDaoReward(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1608,30 +1554,30 @@ export interface LP extends BaseContract {
 
     daoFee(overrides?: CallOverrides): Promise<BigNumber>;
 
-    decimals(overrides?: CallOverrides): Promise<BigNumber>;
-
-    decreaseAllowance(
-      spender: string,
-      subtractedValue: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+    getApproved(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    freezings(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+    getFeeMultiplier(overrides?: CallOverrides): Promise<BigNumber>;
 
-    frontFee(overrides?: CallOverrides): Promise<BigNumber>;
+    getLeaf(overrides?: CallOverrides): Promise<BigNumber>;
 
-    frozen(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getFeeDecimals(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getLiquidityRequests(
-      wallet: string,
+    getLeavesAmount(
+      node: BigNumberish,
+      begin: BigNumberish,
+      end: BigNumberish,
+      l: BigNumberish,
+      r: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getOracleFee(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getPeriodsDates(overrides?: CallOverrides): Promise<BigNumber>;
+    getParent(
+      fromNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getPossibilityOfReinforcement(
       reinforcementAmount: BigNumberish,
@@ -1640,24 +1586,16 @@ export interface LP extends BaseContract {
 
     getReserve(overrides?: CallOverrides): Promise<BigNumber>;
 
-    increaseAllowance(
-      spender: string,
-      addedValue: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    initStartDate(overrides?: CallOverrides): Promise<BigNumber>;
-
     initialize(
       token_: string,
       azuroBetAddress: string,
-      _periodLen: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    liquidityRequest(
-      valueLP: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+    isApprovedForAll(
+      owner: string,
+      operator: string,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     lockReserve(
@@ -1667,22 +1605,27 @@ export interface LP extends BaseContract {
 
     lockedLiquidity(overrides?: CallOverrides): Promise<BigNumber>;
 
+    minDepo(overrides?: CallOverrides): Promise<BigNumber>;
+
     multiplier(overrides?: CallOverrides): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
+
+    nextNode(overrides?: CallOverrides): Promise<BigNumber>;
+
+    nodeWithdrawView(
+      leaf: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     oracleFee(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
-    pendingReward(
-      affiliate_: string,
+    ownerOf(
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    periodLen(overrides?: CallOverrides): Promise<BigNumber>;
-
-    phase2end(overrides?: CallOverrides): Promise<BigNumber>;
 
     reinforcementAbility(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1690,40 +1633,66 @@ export interface LP extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    requests(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    "safeTransferFrom(address,address,uint256)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
-    savedPeriods(overrides?: CallOverrides): Promise<BigNumber>;
+    "safeTransferFrom(address,address,uint256,bytes)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      _data: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     sendOracleReward(
-      _oracle: string,
-      _amount: BigNumberish,
+      oracle: string,
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setApprovalForAll(
+      operator: string,
+      approved: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    supportsInterface(
+      interfaceId: BytesLike,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
     token(overrides?: CallOverrides): Promise<BigNumber>;
 
-    totalBetsAmount(overrides?: CallOverrides): Promise<BigNumber>;
+    tokenByIndex(
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    totalDAORewards(overrides?: CallOverrides): Promise<BigNumber>;
+    tokenOfOwnerByIndex(
+      owner: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    totalFrontRewards(overrides?: CallOverrides): Promise<BigNumber>;
+    tokenURI(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    totalReserve(overrides?: CallOverrides): Promise<BigNumber>;
+    totalDaoRewards(overrides?: CallOverrides): Promise<BigNumber>;
 
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
-    transfer(
-      recipient: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     transferFrom(
-      sender: string,
-      recipient: string,
-      amount: BigNumberish,
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1732,11 +1701,9 @@ export interface LP extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    unfreezeLiquidity(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
+    treeNode(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-    updateDateRatio(overrides?: CallOverrides): Promise<BigNumber>;
+    updateId(overrides?: CallOverrides): Promise<BigNumber>;
 
     viewPayout(
       tokenId: BigNumberish,
@@ -1744,6 +1711,8 @@ export interface LP extends BaseContract {
     ): Promise<BigNumber>;
 
     withdrawLiquidity(
+      depNum: BigNumberish,
+      percent: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1752,9 +1721,12 @@ export interface LP extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    withdrawRatio(overrides?: CallOverrides): Promise<BigNumber>;
+    withdrawTimeout(overrides?: CallOverrides): Promise<BigNumber>;
 
-    workingReserve(overrides?: CallOverrides): Promise<BigNumber>;
+    withdrawals(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -1766,62 +1738,49 @@ export interface LP extends BaseContract {
     addReserve(
       initReserve: BigNumberish,
       profitReserve: BigNumberish,
+      leaf: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    affiliates(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    allowance(
-      owner: string,
-      spender: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     approve(
-      spender: string,
-      amount: BigNumberish,
+      to: string,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     azuroBet(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     balanceOf(
-      account: string,
+      owner: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     bet(
-      conditionID: BigNumberish,
+      conditionId: BigNumberish,
       amount: BigNumberish,
-      outcomeID: BigNumberish,
+      outcomeId: BigNumberish,
       deadline: BigNumberish,
       minOdds: BigNumberish,
-      affiliate_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    bettingLiquidity(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     changeAzuroBet(
-      addr: string,
+      newAzuroBet: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     changeCore(
-      addr: string,
+      newCore: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    changeDAOReward(
-      newDAOFee: BigNumberish,
+    changeDaoReward(
+      newDaoFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    changeFrontReward(
-      newFrontFee: BigNumberish,
+    changeMinDepo(
+      newMinDepo: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1830,16 +1789,12 @@ export interface LP extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    changePeriod(
-      newPeriod: BigNumberish,
+    changeWithdrawTimeout(
+      newWithdrawTimeout: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    claimDAOReward(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    claimReward(
+    claimDaoReward(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1847,33 +1802,30 @@ export interface LP extends BaseContract {
 
     daoFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    decreaseAllowance(
-      spender: string,
-      subtractedValue: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    freezings(
-      arg0: string,
+    getApproved(
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    frontFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getFeeMultiplier(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    frozen(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getLeaf(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getFeeDecimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getLiquidityRequests(
-      wallet: string,
+    getLeavesAmount(
+      node: BigNumberish,
+      begin: BigNumberish,
+      end: BigNumberish,
+      l: BigNumberish,
+      r: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getOracleFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getPeriodsDates(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getParent(
+      fromNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getPossibilityOfReinforcement(
       reinforcementAmount: BigNumberish,
@@ -1882,24 +1834,16 @@ export interface LP extends BaseContract {
 
     getReserve(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    increaseAllowance(
-      spender: string,
-      addedValue: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    initStartDate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     initialize(
       token_: string,
       azuroBetAddress: string,
-      _periodLen: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    liquidityRequest(
-      valueLP: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+    isApprovedForAll(
+      owner: string,
+      operator: string,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     lockReserve(
@@ -1909,22 +1853,27 @@ export interface LP extends BaseContract {
 
     lockedLiquidity(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    minDepo(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     multiplier(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    nextNode(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    nodeWithdrawView(
+      leaf: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     oracleFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    pendingReward(
-      affiliate_: string,
+    ownerOf(
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
-
-    periodLen(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    phase2end(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     reinforcementAbility(
       overrides?: CallOverrides
@@ -1934,43 +1883,66 @@ export interface LP extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    requests(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
+    "safeTransferFrom(address,address,uint256)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    savedPeriods(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    "safeTransferFrom(address,address,uint256,bytes)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      _data: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     sendOracleReward(
-      _oracle: string,
-      _amount: BigNumberish,
+      oracle: string,
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setApprovalForAll(
+      operator: string,
+      approved: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    supportsInterface(
+      interfaceId: BytesLike,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     token(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    totalBetsAmount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    tokenByIndex(
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
-    totalDAORewards(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    tokenOfOwnerByIndex(
+      owner: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
-    totalFrontRewards(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    tokenURI(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
-    totalReserve(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    totalDaoRewards(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    transfer(
-      recipient: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     transferFrom(
-      sender: string,
-      recipient: string,
-      amount: BigNumberish,
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1979,11 +1951,12 @@ export interface LP extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    unfreezeLiquidity(
-      overrides?: Overrides & { from?: string | Promise<string> }
+    treeNode(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    updateDateRatio(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    updateId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     viewPayout(
       tokenId: BigNumberish,
@@ -1991,6 +1964,8 @@ export interface LP extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     withdrawLiquidity(
+      depNum: BigNumberish,
+      percent: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1999,8 +1974,11 @@ export interface LP extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    withdrawRatio(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    withdrawTimeout(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    workingReserve(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    withdrawals(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
   };
 }

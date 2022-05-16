@@ -17,16 +17,16 @@ import { FunctionFragment, Result, EventFragment } from "@ethersproject/abi";
 import { Listener, Provider } from "@ethersproject/providers";
 import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 
-export interface BetInterface extends utils.Interface {
-  contractName: "Bet";
+export interface AzuroBetInterface extends utils.Interface {
+  contractName: "AzuroBet";
   functions: {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "baseURI()": FunctionFragment;
     "burn(uint256)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
-    "getCoreByTokenId(uint256)": FunctionFragment;
-    "getLastTokenId()": FunctionFragment;
+    "getCoreByToken(uint256)": FunctionFragment;
+    "getTokensByOwner(address)": FunctionFragment;
     "initialize()": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "lpAddress()": FunctionFragment;
@@ -34,12 +34,11 @@ export interface BetInterface extends utils.Interface {
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
-    "ownerOfToken(uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
     "setBaseURI(string)": FunctionFragment;
-    "setLP(address)": FunctionFragment;
+    "setLp(address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "tokenByIndex(uint256)": FunctionFragment;
@@ -62,12 +61,12 @@ export interface BetInterface extends utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getCoreByTokenId",
+    functionFragment: "getCoreByToken",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getLastTokenId",
-    values?: undefined
+    functionFragment: "getTokensByOwner",
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
@@ -89,10 +88,6 @@ export interface BetInterface extends utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "ownerOfToken",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
   ): string;
@@ -105,7 +100,7 @@ export interface BetInterface extends utils.Interface {
     values: [string, boolean]
   ): string;
   encodeFunctionData(functionFragment: "setBaseURI", values: [string]): string;
-  encodeFunctionData(functionFragment: "setLP", values: [string]): string;
+  encodeFunctionData(functionFragment: "setLp", values: [string]): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
@@ -145,11 +140,11 @@ export interface BetInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getCoreByTokenId",
+    functionFragment: "getCoreByToken",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getLastTokenId",
+    functionFragment: "getTokensByOwner",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
@@ -163,10 +158,6 @@ export interface BetInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "ownerOfToken",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
@@ -179,7 +170,7 @@ export interface BetInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "setBaseURI", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "setLP", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setLp", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
@@ -210,16 +201,16 @@ export interface BetInterface extends utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
+    "LpChanged(address)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
-    "lpChanged(address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LpChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "lpChanged"): EventFragment;
 }
 
 export type ApprovalEvent = TypedEvent<
@@ -236,6 +227,10 @@ export type ApprovalForAllEvent = TypedEvent<
 
 export type ApprovalForAllEventFilter = TypedEventFilter<ApprovalForAllEvent>;
 
+export type LpChangedEvent = TypedEvent<[string], { lp: string }>;
+
+export type LpChangedEventFilter = TypedEventFilter<LpChangedEvent>;
+
 export type OwnershipTransferredEvent = TypedEvent<
   [string, string],
   { previousOwner: string; newOwner: string }
@@ -251,17 +246,13 @@ export type TransferEvent = TypedEvent<
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
 
-export type lpChangedEvent = TypedEvent<[string], { lp: string }>;
-
-export type lpChangedEventFilter = TypedEventFilter<lpChangedEvent>;
-
-export interface Bet extends BaseContract {
-  contractName: "Bet";
+export interface AzuroBet extends BaseContract {
+  contractName: "AzuroBet";
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: BetInterface;
+  interface: AzuroBetInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -294,7 +285,7 @@ export interface Bet extends BaseContract {
     baseURI(overrides?: CallOverrides): Promise<[string]>;
 
     burn(
-      id: BigNumberish,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -303,14 +294,15 @@ export interface Bet extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    getCoreByTokenId(
+    getCoreByToken(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string] & { core: string }>;
 
-    getLastTokenId(
+    getTokensByOwner(
+      owner: string,
       overrides?: CallOverrides
-    ): Promise<[BigNumber] & { tokenId: BigNumber }>;
+    ): Promise<[BigNumber[]] & { tokenIds: BigNumber[] }>;
 
     initialize(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -335,11 +327,6 @@ export interface Bet extends BaseContract {
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     ownerOf(
-      tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    ownerOfToken(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
@@ -374,8 +361,8 @@ export interface Bet extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setLP(
-      lpAddress_: string,
+    setLp(
+      lp: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -428,7 +415,7 @@ export interface Bet extends BaseContract {
   baseURI(overrides?: CallOverrides): Promise<string>;
 
   burn(
-    id: BigNumberish,
+    tokenId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -437,12 +424,15 @@ export interface Bet extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
-  getCoreByTokenId(
+  getCoreByToken(
     tokenId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<string>;
 
-  getLastTokenId(overrides?: CallOverrides): Promise<BigNumber>;
+  getTokensByOwner(
+    owner: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber[]>;
 
   initialize(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -467,11 +457,6 @@ export interface Bet extends BaseContract {
   owner(overrides?: CallOverrides): Promise<string>;
 
   ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
-  ownerOfToken(
-    tokenId: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<string>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -503,8 +488,8 @@ export interface Bet extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setLP(
-    lpAddress_: string,
+  setLp(
+    lp: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -553,19 +538,22 @@ export interface Bet extends BaseContract {
 
     baseURI(overrides?: CallOverrides): Promise<string>;
 
-    burn(id: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    burn(tokenId: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
 
-    getCoreByTokenId(
+    getCoreByToken(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
 
-    getLastTokenId(overrides?: CallOverrides): Promise<BigNumber>;
+    getTokensByOwner(
+      owner: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber[]>;
 
     initialize(overrides?: CallOverrides): Promise<void>;
 
@@ -588,11 +576,6 @@ export interface Bet extends BaseContract {
     owner(overrides?: CallOverrides): Promise<string>;
 
     ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
-    ownerOfToken(
-      tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<string>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -619,7 +602,7 @@ export interface Bet extends BaseContract {
 
     setBaseURI(uri: string, overrides?: CallOverrides): Promise<void>;
 
-    setLP(lpAddress_: string, overrides?: CallOverrides): Promise<void>;
+    setLp(lp: string, overrides?: CallOverrides): Promise<void>;
 
     supportsInterface(
       interfaceId: BytesLike,
@@ -679,6 +662,9 @@ export interface Bet extends BaseContract {
       approved?: null
     ): ApprovalForAllEventFilter;
 
+    "LpChanged(address)"(lp?: null): LpChangedEventFilter;
+    LpChanged(lp?: null): LpChangedEventFilter;
+
     "OwnershipTransferred(address,address)"(
       previousOwner?: string | null,
       newOwner?: string | null
@@ -698,9 +684,6 @@ export interface Bet extends BaseContract {
       to?: string | null,
       tokenId?: BigNumberish | null
     ): TransferEventFilter;
-
-    "lpChanged(address)"(lp?: null): lpChangedEventFilter;
-    lpChanged(lp?: null): lpChangedEventFilter;
   };
 
   estimateGas: {
@@ -715,7 +698,7 @@ export interface Bet extends BaseContract {
     baseURI(overrides?: CallOverrides): Promise<BigNumber>;
 
     burn(
-      id: BigNumberish,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -724,12 +707,15 @@ export interface Bet extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getCoreByTokenId(
+    getCoreByToken(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getLastTokenId(overrides?: CallOverrides): Promise<BigNumber>;
+    getTokensByOwner(
+      owner: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     initialize(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -754,11 +740,6 @@ export interface Bet extends BaseContract {
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     ownerOf(
-      tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    ownerOfToken(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -793,8 +774,8 @@ export interface Bet extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setLP(
-      lpAddress_: string,
+    setLp(
+      lp: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -851,7 +832,7 @@ export interface Bet extends BaseContract {
     baseURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     burn(
-      id: BigNumberish,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -860,12 +841,15 @@ export interface Bet extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getCoreByTokenId(
+    getCoreByToken(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getLastTokenId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getTokensByOwner(
+      owner: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     initialize(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -890,11 +874,6 @@ export interface Bet extends BaseContract {
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ownerOf(
-      tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    ownerOfToken(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -929,8 +908,8 @@ export interface Bet extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setLP(
-      lpAddress_: string,
+    setLp(
+      lp: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

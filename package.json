@@ -1,9 +1,12 @@
 {
   "name": "@azuro-protocol/sdk",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "engines": {
     "node": "=14.17.4",
     "npm": "=6.14.14"
+  },
+  "azuro": {
+    "contractsVersion": "release-1.6"
   },
   "author": {
     "name": "Pavel Ivanov",
@@ -30,6 +33,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\"",
+    "update-abi": "node bin/updateAbi.js && npm run typechain",
     "typechain": "typechain --target ethers-v5 --out-dir ./src/contracts/types './src/contracts/abis/*.json'",
     "dev": "rollup -cw",
     "build": "rimraf ./dist && rimraf ./lib && npm run typechain && rollup -c --compact",

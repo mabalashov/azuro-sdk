@@ -10,11 +10,10 @@ type PlaceBetProps = {
   amount: number
   betRate: number
   slippage: number
-  affiliate?: string
 }
 
 export const placeBet = async (props: PlaceBetProps) => {
-  const { conditionId, outcomeId, amount, betRate, slippage, affiliate = '0x0000000000000000000000000000000000000000' } = props
+  const { conditionId, outcomeId, amount, betRate, slippage } = props
 
   const lpContract = getContract('lp', true)
 
@@ -30,7 +29,6 @@ export const placeBet = async (props: PlaceBetProps) => {
     outcomeId,
     deadline,
     rawMinRate,
-    affiliate,
   )
 }
 
