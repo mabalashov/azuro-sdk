@@ -1,17 +1,17 @@
-const { configure, setSelectedChainId, setWallerProvider, fetchConditions } = require('../lib')
+const { configure, setSelectedChainId, fetchGames } = require('../lib')
 
 
 configure({
-  alchemyKey: '6KpUh1AlP_sMDJZ9PgIqGqAXDyXNsDRZ',
-  infuraKey: '953608e98b6345af8cf956979d4a2e81',
+  rpcUrl: 'https://sokol-rpc.azuro.org',
+  ipfsGateway: 'https://azuro.mypinata.cloud/ipfs/',
 })
 
 setSelectedChainId(4)
 
-fetchConditions()
+fetchGames()
   .then((res) => {
-    console.log(333, res)
+    console.log('result:', res)
   })
   .catch((err) => {
-    console.error(444, err)
+    console.error('error:', err)
   })
