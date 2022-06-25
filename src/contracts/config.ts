@@ -28,9 +28,9 @@ export const CONTRACTS: ContractsData = {
     abi: AzuroBetABI,
     decimals: 18,
   },
-  usdt: {
+  token: {
     get address() {
-      return state.contractAddresses.usdt
+      return state.contractAddresses.token
     },
     abi: TestERC20ABI,
     decimals: 18,

@@ -1,6 +1,6 @@
 import { utils } from 'ethers'
 
-import fetchGameIpfsData from './fetchGameIpfsData'
+import fetchGameIpfsData, { FormattedIpfsData } from './fetchGameIpfsData'
 import fetchConditions from './fetchConditions'
 import type { FetchConditionsProps, ConditionGameData } from './fetchConditions'
 import betTypeOdd from '../helpers/betTypeOdd'
@@ -109,6 +109,11 @@ const groupOddsByOutcomes = (values: GetOddsByOutcomesProps) => {
   return outcomes.map((outcomeId, index) => {
     const value = odds[index]
 
+    if (!betTypeOdd[outcomeId]) {
+      console.warn(`Unknown outcomeId ${outcomeId}. Please update the Azuro SDK version`)
+      return
+    }
+
     const { outcomeRegistryId, marketRegistryId, paramId } = betTypeOdd[outcomeId]
 
     const key = `${gameId}-${marketRegistryId}`
@@ -135,14 +140,7 @@ const groupOddsByOutcomes = (values: GetOddsByOutcomesProps) => {
 
 type FetchGamesProps = FetchConditionsProps
 
-export type Game = Omit<GroupGamesResult, 'ipfsHashHex'> & {
-  league: string
-  country: string
-  participants: {
-    name: string
-    image: string
-  }[]
-}
+export type Game = Omit<GroupGamesResult, 'ipfsHashHex'> & FormattedIpfsData;
 
 const fetchGames = async (props: FetchGamesProps = {}): Promise<Game[]> => {
   gamesInfo = {}
