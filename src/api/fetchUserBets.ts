@@ -4,10 +4,9 @@ import { formatUnits } from '@ethersproject/units'
 import fetchGameIpfsData from './fetchGameIpfsData'
 import type { FormattedIpfsData } from './fetchGameIpfsData'
 import type { ConditionGameData } from './fetchConditions'
-import { getContract } from '../contracts'
+import { getContract, getRateDecimals, getTokenDecimals } from '../contracts'
 import betTypeOdd from '../helpers/betTypeOdd'
 import { ConditionStatus } from '../helpers/enums'
-import state from '../contracts/state'
 
 
 const fetchBet = async (nftId: number) => {
@@ -16,7 +15,7 @@ const fetchBet = async (nftId: number) => {
   try {
     // TODO take createdDate from bet - added on 7/19/21 by pavelivanov
     let { conditionId: rawConditionId, amount: rawAmount, outcome: rawOutcome, odds, payed, createdAt } = await coreContract.bets(nftId)
-    const { scopeId, state: conditionState, ipfsHash: ipfsHashHex, timestamp, outcomeWin } = await coreContract.getCondition(rawConditionId)
+    const { scopeId, state, ipfsHash: ipfsHashHex, timestamp, outcomeWin } = await coreContract.getCondition(rawConditionId)
 
     const gameId = scopeId.toNumber()
     const conditionId = rawConditionId.toNumber()
@@ -35,12 +34,12 @@ const fetchBet = async (nftId: number) => {
 
     const { marketRegistryId, outcomeRegistryId, paramId } = betTypeOdd[outcomeBetId]
 
-    const rate = parseFloat(formatUnits(odds, state.rateDecimals))
-    const amount = parseFloat(formatUnits(rawAmount, state.tokenDecimals))
+    const rate = parseFloat(formatUnits(odds, await getRateDecimals()))
+    const amount = parseFloat(formatUnits(rawAmount, await getTokenDecimals()))
 
     let result
 
-    if (conditionState === ConditionStatus.CANCELED) {
+    if (state === ConditionStatus.CANCELED) {
       result = amount
     }
     else if (outcomeWinId === 0) {
@@ -57,7 +56,7 @@ const fetchBet = async (nftId: number) => {
       id: gameId,
       ...gameData,
       startsAt,
-      state: conditionState,
+      state,
     }
 
     return {
