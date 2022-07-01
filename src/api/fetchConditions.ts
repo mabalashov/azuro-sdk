@@ -19,6 +19,11 @@ export type Condition = {
   gameData: ConditionGameData
 }
 
+export type Conditions = {
+  conditions: Condition[],
+  latestBlock: number,
+}
+
 const _calculateInitialOdds = (fundBank: BigNumber[], margin: BigNumber) => {
   const fundBankSum = fundBank[0].add(fundBank[1]).toString()
   // @ts-ignore
@@ -33,16 +38,17 @@ export type FetchConditionsProps = {
   filters?: {
     resolved?: boolean
     canceled?: boolean
-  }
+  },
+  from?: number
 }
 
-const fetchConditions = async (props?: FetchConditionsProps): Promise<Condition[]> => {
+const fetchConditions = async (props?: FetchConditionsProps): Promise<Conditions> => {
   const { resolved = true, canceled = true } = props?.filters || {}
 
   const coreContract = getContract('core')
 
   const createdFilter = coreContract.filters.ConditionCreated()
-  const events = await coreContract.queryFilter(createdFilter)
+  const events = await coreContract.queryFilter(createdFilter, props.from)
 
   const conditions = await Promise.all(events.map(async ({ args: { conditionId: rawConditionId } }) => {
     try {
@@ -88,7 +94,10 @@ const fetchConditions = async (props?: FetchConditionsProps): Promise<Condition[
     }
   }))
 
-  return conditions.filter(Boolean)
+  return {
+    conditions: conditions.filter(Boolean),
+    latestBlock: events[events.length - 1].blockNumber,
+  }
 }
 
 export default fetchConditions

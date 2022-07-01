@@ -66,7 +66,22 @@ setWalletProvider(library)
 
 #### fetchGames
 
-This function synchronizes with the blockchain and gives you all the matches that are currently recorded in the blockchain. You also have the option to filter out these matches if you don't want to receive past matches or cancelled matches.
+This function synchronizes with the blockchain and gives you all the matches that are currently recorded in the blockchain.
+
+You also have the option to filter out these matches if you don't want to receive past matches or cancelled matches.
+
+You can specify the block number to start parsing games from. 
+Better to parse only the latest games for performance reasons
+
+##### Arguments:
+
+| Argument          | Type    | Default | Description                                             |
+|-------------------|---------|--------|---------------------------------------------------------|
+| filters.resolved  | boolean | true   | Should resolved games be present in the result list     |
+| filters.cancelled | boolean | true   | Should cancelled games be present in the result list    |
+| from              | number  |        | Number of transaction block to start parsing games from |
+
+##### Example:
 
 ```javascript
 import { fetchGames } from '@azuro-protocol/sdk'
@@ -75,7 +90,8 @@ await fetchGames({
   filters : {
     resolved: false,
     canceled: false,
-  }
+  },
+  from: 26746291,
 })
 ```
 
@@ -129,6 +145,8 @@ An example of what you get when you use this function.
 ```
 
 To understand what identifiers to outcomeId and other parameters mean, see our IPFS list, where we store [dictionary](#dictionary) and descriptions.
+
+##### Response object:
 
 | Property | Type | Description |
 | :--- | :--- | :--- |
@@ -188,6 +206,21 @@ import { JsonRpcProvider, Web3Provider } from '@ethersproject/providers'
 
 //library: Web3Provider
 setWalletProvider(library);
+```
+
+## getLatestConditionsBlock
+
+This method returns the number of latest block was fetched or null in case the games were never fetched yet
+
+You can use this value as an argument `from` in the next invocation of method `fetchGames` to prevent fetching 
+the same games twice
+
+```javascript
+import { getLatestConditionsBlock } from '@azuro-protocol/sdk'
+
+await fetchGames(/* ... */)
+
+getLatestConditionsBlock() // number 
 ```
 
 ## fetchAllowance

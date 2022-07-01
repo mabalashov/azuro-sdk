@@ -5,4 +5,5 @@ export {
   setWalletProvider,
   setContractAddresses,
 } from './contracts/state'
+export { getLatestConditionsBlock } from './contracts/statistics'
 export { configure } from './config'
