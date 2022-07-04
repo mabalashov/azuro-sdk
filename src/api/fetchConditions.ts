@@ -20,8 +20,8 @@ export type Condition = {
 }
 
 export type Conditions = {
-  conditions: Condition[],
-  latestBlock: number,
+  conditions: Condition[]
+  latestBlock: number
 }
 
 const _calculateInitialOdds = (fundBank: BigNumber[], margin: BigNumber) => {
@@ -48,7 +48,7 @@ const fetchConditions = async (props?: FetchConditionsProps): Promise<Conditions
   const coreContract = getContract('core')
 
   const createdFilter = coreContract.filters.ConditionCreated()
-  const events = await coreContract.queryFilter(createdFilter, props.from)
+  const events = await coreContract.queryFilter(createdFilter, props?.from)
 
   const conditions = await Promise.all(events.map(async ({ args: { conditionId: rawConditionId } }) => {
     try {
