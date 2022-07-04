@@ -38,7 +38,7 @@ export type FetchConditionsProps = {
   filters?: {
     resolved?: boolean
     canceled?: boolean
-  },
+  }
   from?: number
 }
 
