@@ -4,6 +4,7 @@ import fetchGameIpfsData, { FormattedIpfsData } from './fetchGameIpfsData'
 import fetchConditions from './fetchConditions'
 import type { FetchConditionsProps, ConditionGameData } from './fetchConditions'
 import betTypeOdd from '../helpers/betTypeOdd'
+import stats from '../contracts/stats'
 
 
 /*
@@ -146,7 +147,7 @@ const fetchGames = async (props: FetchGamesProps = {}): Promise<Game[]> => {
   gamesInfo = {}
   gameBets = {}
 
-  const conditions = await fetchConditions(props)
+  const { conditions, latestBlock } = await fetchConditions(props)
 
   conditions.forEach((condition) => {
     const { id, outcomes, odds, gameData } = condition
@@ -185,6 +186,8 @@ const fetchGames = async (props: FetchGamesProps = {}): Promise<Game[]> => {
       return null
     }
   }))
+
+  stats.latestConditionsBlock = latestBlock
 
   return result.filter(Boolean).sort((a, b) => a.startsAt - b.startsAt)
 }
