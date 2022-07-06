@@ -65,6 +65,7 @@ const fetchBet = async (nftId: number) => {
       paramId,
       marketRegistryId,
       outcomeRegistryId,
+      outcomeId: outcomeBetId,
       rate,
       amount,
       result,
