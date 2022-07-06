@@ -288,6 +288,7 @@ An example of what you get when you use this function.
             "paramId": 1,
             "marketRegistryId": 1,
             "outcomeRegistryId": 1,
+            "outcomeId": 1,
             "rate": 2.062164217,
             "amount": 1,
             "result": -1,
